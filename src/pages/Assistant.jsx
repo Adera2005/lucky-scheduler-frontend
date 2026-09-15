@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown';
 import { useState } from 'react';
 import api from '../services/api.js';
 
@@ -83,7 +84,7 @@ const presetButtons = [
       {presetButtons.map((btn) => (
         <button
           key={btn.label}
-          onClick={() => askQuestion(`${btn.prompt}${course}`)}
+          onClick={() => askQuestion(`${btn.prompt}${question || course}`)}
           disabled={loading}
         >
           {btn.label}
@@ -95,7 +96,8 @@ const presetButtons = [
       {messages.map((msg, index) => (
         <div key={index} style={{ border: '1px solid gray', margin: '10px', padding: '10px' }}>
           <p><strong>You:</strong> {msg.question}</p>
-          <p><strong>Gemini:</strong> {msg.answer}</p>
+          <p><strong>Gemini:</strong></p>
+<ReactMarkdown>{msg.answer}</ReactMarkdown>
         </div>
       ))}
     </div>
