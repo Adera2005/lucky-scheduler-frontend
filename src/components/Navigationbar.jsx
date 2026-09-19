@@ -24,33 +24,49 @@ function Navigationbar({ onMenuClick, isOpen }) {
       boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-        <div onClick={onMenuClick} style={{ cursor: "pointer", width: "24px", height: "20px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+
+        <div onClick={onMenuClick} style={{ cursor: "pointer", width: "36px", height: "36px", position: "relative" }}>
+          
+          {/* Hamburger — fades out */}
           <span style={{
-            display: "block", height: "2px", background: "white", borderRadius: "2px",
-            transform: isOpen ? "rotate(45deg) translateY(9px)" : "rotate(0)",
-            transition: "all 0.3s ease"
-          }}></span>
-          <span style={{
-            display: "block", height: "2px", background: "white", borderRadius: "2px",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            color: "white",
+            fontSize: "28px",
             opacity: isOpen ? 0 : 1,
-            transition: "all 0.3s ease"
-          }}></span>
+            transition: "opacity 0.3s ease",
+            lineHeight: 1,
+          }}>☰</span>
+
+          {/* X — fades in */}
           <span style={{
-            display: "block", height: "2px", background: "white", borderRadius: "2px",
-            transform: isOpen ? "rotate(-45deg) translateY(-9px)" : "rotate(0)",
-            transition: "all 0.3s ease"
-          }}></span>
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            color: "white",
+            fontSize: "28px",
+            opacity: isOpen ? 1 : 0,
+            transition: "opacity 0.6s ease",
+            lineHeight: 1,
+          }}>✕</span>
+
         </div>
-        <h2 style={{ color: "white", margin: 0, fontSize: "18px" }}>📚 Lucky Scheduler</h2>
+
+        <h2 style={{ color: "white", margin: 0, fontSize: "20px" }}>📚 Lucky Scheduler</h2>
       </div>
+
       <button onClick={logout} style={{
         background: "#e74c3c",
         color: "white",
         border: "none",
-        padding: "8px 16px",
+        padding: "10px 20px",
         cursor: "pointer",
         borderRadius: "6px",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: "14px",
       }}>
         Logout
       </button>
