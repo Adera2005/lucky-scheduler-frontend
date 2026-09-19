@@ -22,6 +22,7 @@ const handleSubmit = async (e) =>{
     try{
         const response = await api.post('/api/auth/signup',formData);
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('name', response.data.data.student.name);
     navigate('/dashboard');
     }
     catch (err) {
@@ -33,6 +34,7 @@ const handleSubmit = async (e) =>{
 
     return (
   <>
+ 
     <h1>Sign Up</h1>
 
     {error && <p style={{ color: 'red' }}>{error}</p>}

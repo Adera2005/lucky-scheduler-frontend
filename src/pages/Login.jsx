@@ -22,6 +22,7 @@ const handleSubmit = async (e) => {
   try {
     const response = await api.post('/api/auth/login', formData);
     localStorage.setItem('token', response.data.token);
+    localStorage.setItem('name', response.data.data.student.name);
     navigate('/dashboard');
   } catch (err) {
     setError(err.response?.data?.message || 'Login failed. Please try again.');
@@ -34,6 +35,7 @@ const handleSubmit = async (e) => {
 
     return(
         <>
+        
         <h1>Login</h1>
 
     {error && <p style={{ color: 'red' }}>{error}</p>}
