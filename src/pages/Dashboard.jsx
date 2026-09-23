@@ -57,7 +57,13 @@ function Dashboard() {
           <div key={schedule.id}>
             <h3>{schedule.course}</h3>
             <p>{schedule.totalPages} pages — {schedule.totalDays} days</p>
-            <p>Reading at: {schedule.preferredTime}</p>
+            
+  <p>Study sessions:</p>
+{schedule.sessions.map((session) => (
+  <p key={session.id}>
+    {session.startTime} - {session.endTime}
+  </p>
+))}
             <Link to={`/schedule/${schedule.id}`}>
               <button>View Schedule</button>
             </Link>

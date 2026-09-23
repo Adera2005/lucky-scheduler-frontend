@@ -1,0 +1,118 @@
+body {
+  margin: 0;
+  background: #eef2fb;
+}
+.login-page {
+  width: 100%;
+  max-width: 500px;
+  margin: 40px auto;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* Blue top section */
+.login-blue {
+  background: #5b7fd6;
+  color: white;
+  padding: 84px 20px;
+  text-align: center;
+}
+
+.login-blue h1 {
+  margin-bottom: 10px;
+}
+
+.login-blue p {
+  margin: 0;
+}
+
+/* White bottom section */
+.login-white {
+  background: white;
+  padding: 40px 30px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.login-white h2 {
+  margin-bottom: 30px;
+}
+
+/* Error message */
+.login-error {
+  background: #ffe5e5;
+  color: #c0392b;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+/* Input areas */
+.login-field {
+  margin-bottom: 20px;
+}
+
+.login-field label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: 600;
+}
+
+.login-field input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dde5f4;
+  border-radius: 8px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+/* Password */
+.password-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dde5f4;
+  border-radius: 8px;
+}
+
+.password-box input {
+  border: none;
+  outline: none;
+}
+
+.password-box span {
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+/* Login button */
+.login-white button {
+  width: 100%;
+  padding: 13px;
+  background: #5b7fd6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-white button:hover {
+  background: #4a6cc4;
+}
+
+/* Sign up */
+.signup-text {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.signup-text a {
+  color: #4a6cc4;
+  font-weight: bold;
+  text-decoration: none;
+}
+
