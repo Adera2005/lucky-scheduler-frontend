@@ -1,0 +1,156 @@
+body {
+  margin: 0;
+  background: #eef2fb;
+  font-family: Arial, sans-serif;
+  color: #24304d;
+}
+
+/* Main dashboard area */
+.dashboard-content {
+  margin-top: 60px;
+  padding: 40px;
+  min-height: calc(100vh - 60px);
+  box-sizing: border-box;
+}
+
+/* Welcome section */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.dashboard-header h1 {
+  margin: 0 0 10px;
+  font-size: 30px;
+  color: #24304d;
+}
+
+.dashboard-header p {
+  margin: 0;
+  color: #6b7590;
+}
+
+/* Create schedule button */
+.create-schedule-btn {
+  background: #5b7fd6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.create-schedule-btn:hover {
+  background: #4a6cc4;
+}
+
+/* Section title */
+.schedules-section h2 {
+  margin-bottom: 20px;
+  color: #24304d;
+}
+
+/* Schedule cards container */
+.schedule-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Individual schedule card */
+.schedule-card {
+  background: white;
+  border: 1px solid #dde5f4;
+  border-radius: 15px;
+  padding: 25px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Course name */
+.schedule-card h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #24304d;
+}
+
+/* Pages and days */
+.schedule-info {
+  display: flex;
+  gap: 8px;
+  color: #6b7590;
+  margin: 15px 0 25px;
+}
+
+/* Study sessions heading */
+.sessions-title {
+  font-weight: bold;
+  color: #24304d;
+  margin-bottom: 10px;
+}
+
+/* Individual study sessions */
+.sessions-list p {
+  background: #f5f8ff;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 8px 0;
+  color: #4a6cc4;
+}
+.schedule-card > a {
+  margin-top: auto;
+  text-decoration: none;
+}
+/* View schedule button */
+.view-schedule-btn {
+  width: 100%;
+  padding: 12px;
+  background: #5b7fd6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.view-schedule-btn:hover {
+  background: #4a6cc4;
+}
+
+/* No schedules message */
+.empty-schedules {
+  background: white;
+  border: 1px solid #dde5f4;
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+}
+
+.empty-schedules h2 {
+  color: #24304d;
+}
+
+.empty-schedules p {
+  color: #6b7590;
+}
+
+/* Loading message */
+.dashboard-message {
+  color: #6b7590;
+}
+
+/* Error message */
+.dashboard-error {
+  background: #ffe5e5;
+  color: #c0392b;
+  border-radius: 8px;
+  padding: 12px;
+}
