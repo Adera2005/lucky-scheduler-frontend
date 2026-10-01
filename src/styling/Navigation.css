@@ -1,0 +1,74 @@
+.navigationbar {
+  background: #8fa8e8;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.navigation-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.menu-button {
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  position: relative;
+}
+
+.hamburger,
+.close-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 28px;
+  line-height: 1;
+  transition: opacity 0.3s ease;
+}
+
+.hamburger {
+  opacity: 1;
+}
+
+.hamburger.hidden {
+  opacity: 0;
+}
+
+.close-icon {
+  opacity: 0;
+}
+
+.close-icon.visible {
+  opacity: 1;
+}
+
+.navigation-title {
+  color: white;
+  margin: 0;
+  font-size: 20px;
+}
+
+.logout-button {
+  background: white;
+  color: #4a6cc4;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.logout-button:hover {
+  background: #eaf0fc;
+}

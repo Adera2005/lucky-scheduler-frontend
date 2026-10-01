@@ -1,4 +1,4 @@
-
+import '../styling/Schedule.css';
 import Sidebar from '../components/Sidebar.jsx';
 import Navigationbar from '../components/Navigationbar.jsx';
 import { useState, useEffect } from 'react';
@@ -144,124 +144,127 @@ function Schedule() {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <div>
+      <div className='schedule-page'>
         {loading && <p>Loading schedule...</p>}
         {error && <p>{error}</p>}
 
         {schedule && (
-          <>
-            <h1>{schedule.course} — Study Schedule</h1>
+  <>
+    <div className="schedule-header">
+      <h1>{schedule.course} — Study Schedule</h1>
 
-            <p>Total Pages: {schedule.totalPages}</p>
-            <p>Total Days: {schedule.totalDays}</p>
-            <p>Pages per day: {schedule.pagesPerDay}</p>
+      <div className="schedule-summary">
+        <p>Total Pages: {schedule.totalPages}</p>
+        <p>Total Days: {schedule.totalDays}</p>
+        <p>Pages per day: {schedule.pagesPerDay}</p>
+      </div>
 
-            {schedule.pdfText && (
+      {schedule.pdfText && (
+        <p className="pdf-status">
+          PDF content loaded — AI responses will be based on your document.
+        </p>
+      )}
+    </div>
+
+    <div className="schedule-layout">
+
+      {/* LEFT SIDE - YOUTUBE VIDEOS */}
+      <section className="youtube-section">
+        <h2>Learning Videos</h2>
+        <p>Videos related to your study document.</p>
+
+        {/* We will put the 5 document videos here later */}
+      </section>
+
+
+      {/* RIGHT SIDE - STUDY SESSIONS */}
+      <section className="sessions-section">
+        <h2>Daily Tasks</h2>
+
+        {schedule.tasks && schedule.tasks.map((task, index) => {
+          const pages = `${task.pageStart}–${task.pageEnd}`;
+
+          return (
+            <div className="session-card" key={task.id}>
+
+              <div className="session-header">
+                <h3>
+                  Day {task.day}
+                </h3>
+
+                <span>
+                  {task.startTime} - {task.endTime}
+                </span>
+              </div>
+
               <p>
-                PDF content loaded — AI responses will be based on your document.
+                Pages: <strong>{pages}</strong>
               </p>
-            )}
 
-            <h2>Daily Tasks</h2>
+              <p>
+                Status:{' '}
+                {task.completed
+                  ? 'Completed'
+                  : task.rescheduled
+                  ? 'Rescheduled'
+                  : 'Pending'}
+              </p>
 
-            {schedule.tasks &&schedule.tasks.map((task, index) => {
-              const pages = `${task.pageStart}–${task.pageEnd}`;
-
-              return (
-                <div key={task.id}>
-                  <p>
-                    <strong>Day {task.day}</strong> — {task.startTime} to {task.endTime}
-                  </p>
-
-                  <p>
-                    Pages: <strong>{pages}</strong>
-                  </p>
-
-                  <p>
-                    Status:{' '}
-                    {task.completed
-                      ? 'Completed'
-                      : task.rescheduled
-                      ? 'Rescheduled'
-                      : 'Pending'}
-                  </p>
-
-                  {!task.completed && (
-                    <>
-                      <button onClick={() => completeTask(task.id)}>
-                        Mark Complete
-                      </button>
-
-                      <button onClick={() => rescheduleSingleSession(task.id)}>
-                        Reschedule This Session
-                      </button>
-                    </>
-                  )}
-
-                  <p>
-                    AI Help for pages {pages}:
-                  </p>
-
-                  {smartButtons.map((btn) => (
-                    <button
-                      key={btn.key}
-                      onClick={() => askSessionAI(task, index, btn.key)}
-                      disabled={aiLoading[index]}
-                    >
-                      {btn.label}
-                    </button>
-                  ))}
-
-                  {aiLoading[index] && <p>AI is thinking...</p>}
-
-                  {aiHelp[index] && (
-                    <ReactMarkdown>
-                      {aiHelp[index]}
-                    </ReactMarkdown>
-                  )}
-
-                  <button
-                    onClick={() => fetchSessionVideos(task, index)}
-                    disabled={videoLoading[index]}
-                  >
-                    {videoLoading[index]
-                      ? 'Loading...'
-                      : 'Find Videos for This Section'}
+              {!task.completed && (
+                <div className="session-actions">
+                  <button onClick={() => completeTask(task.id)}>
+                    Mark Complete
                   </button>
 
-                  {sessionVideos[index] && (
-                    <div>
-                      {sessionVideos[index].map((video) => (
-                        <div key={video.videoId}>
-                          <img
-                            src={video.thumbnail}
-                            alt={video.title}
-                            width="120"
-                          />
-
-                          <p>{video.title}</p>
-                          <p>{video.channel}</p>
-
-                          <a
-                            href={video.url}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            Watch on YouTube
-                          </a>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <button onClick={() => rescheduleSingleSession(task.id)}>
+                    Reschedule This Session
+                  </button>
                 </div>
-              );
-            })}
-          </>
-        )}
+              )}
+
+              <p className="ai-title">
+                AI Help for pages {pages}:
+              </p>
+
+              <div className="ai-buttons">
+                {smartButtons.map((btn) => (
+                  <button
+                    key={btn.key}
+                    onClick={() => askSessionAI(task, index, btn.key)}
+                    disabled={aiLoading[index]}
+                  >
+                    {btn.label}
+                  </button>
+                ))}
+              </div>
+
+              {aiLoading[index] && (
+                <p className="ai-loading">
+                  AI is thinking...
+                </p>
+              )}
+
+              {aiHelp[index] && (
+                <div className="ai-response">
+                  <ReactMarkdown>
+                    {aiHelp[index]}
+                  </ReactMarkdown>
+                </div>
+              )}
+
+              {/* YouTube section will be removed from individual sessions later */}
+
+            </div>
+          );
+        })}
+            </section>
+
+    </div>
+  </>
+)}
       </div>
     </>
   );
 }
-
 export default Schedule;
 
