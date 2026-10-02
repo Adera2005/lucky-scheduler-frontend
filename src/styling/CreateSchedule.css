@@ -1,0 +1,262 @@
+.create-schedule-page {
+  background: #eef2fb;
+  min-height: 100vh;
+  padding: 90px 30px 40px;
+  box-sizing: border-box;
+  color: #24304d;
+}
+
+.create-schedule-container {
+  max-width: 500px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #dde5f4;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.create-schedule-container h1 {
+  margin: 0 0 25px;
+  color: #24304d;
+  font-size: 28px;
+}
+
+.schedule-error {
+  background: #fff1f1;
+  color: #d9534f;
+  border: 1px solid #f0caca;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.schedule-form-group {
+  margin-bottom: 20px;
+}
+
+.schedule-form-group label {
+  display: block;
+  color: #24304d;
+  font-weight: bold;
+  margin-bottom: 7px;
+  font-size: 14px;
+}
+
+.schedule-form-group input[type="text"],
+.schedule-form-group input[type="number"],
+.schedule-form-group input[type="time"] {
+  background: #f5f8ff;
+  border: 1px solid #dde5f4;
+  color: #24304d;
+  padding: 10px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.schedule-form-group input[type="text"],
+.schedule-form-group input[type="number"] {
+  
+  width: 300px;
+  display: block;
+  margin: 0 auto;
+}
+
+.schedule-form-group input:focus {
+  outline: none;
+  border-color: #5b7fd6;
+}
+
+.pdf-input {
+  background: #f5f8ff;
+  border: 1px solid #dde5f4;
+  padding: 10px;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pdf-selected {
+  color: #4a6cc4;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.session-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.session-label {
+  color: #24304d;
+  font-size: 14px;
+  min-width: 75px;
+}
+
+.session-to {
+  color: #68738c;
+  font-size: 14px;
+}
+
+.session-row input[type="time"] {
+  width: 120px;
+}
+
+.remove-session-btn {
+  background: #d9534f;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.remove-session-btn:hover {
+  background: #c9302c;
+}
+
+.add-session-btn {
+  background: #eaf0fc;
+  color: #4a6cc4;
+  border: 1px solid #5b7fd6;
+  padding: 9px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.add-session-btn:hover {
+  background: #dce7fb;
+}
+
+.create-schedule-btn {
+  background: #5b7fd6;
+  color: white;
+  border: none;
+  padding: 11px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.create-schedule-btn:hover {
+  background: #4a6cc4;
+}
+
+.create-schedule-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+  .create-schedule-page {
+    padding: 85px 15px 30px;
+  }
+
+  .create-schedule-container {
+    padding: 20px;
+  }
+
+  .create-schedule-container h1 {
+    font-size: 24px;
+  }
+
+ .session-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f5f8ff;
+  border: 1px solid #dde5f4;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+}
+
+ .session-row input[type="time"] {
+  width: 140px;
+  height: 42px;
+  padding: 8px 12px;
+  background: #f5f8ff;
+  color: #24304d;
+  border: 1px solid #cbd7ee;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: 0.2s ease;
+  
+}
+
+.session-row input[type="time"]:hover {
+  border-color: #5b7fd6;
+  
+
+}
+
+.session-row input[type="time"]:focus {
+  outline: none;
+  border-color: #5b7fd6;
+  box-shadow: 0 0 0 3px #eaf0fc;
+}
+
+  .session-label {
+  color: #24304d;
+  font-weight: bold;
+  font-size: 14px;
+}
+}
+.pdf-upload {
+  display: block;
+  width:300px;
+  margin: 0 auto;
+  background: #f5f8ff;
+  border: 1px solid #dde5f4;
+  border-radius: 8px;
+  padding: 40px 40px;
+  cursor: pointer;
+  color: #4a6cc4;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  transition: 0.2s ease;
+}
+
+.pdf-upload:hover {
+  background: #eaf0fc;
+  border-color: #5b7fd6;
+}
+
+.pdf-upload input {
+  display: none;
+}
+
+.pdf-upload-icon {
+  font-size: 28px;
+}
+
+.pdf-upload-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pdf-upload-text strong {
+  color: #24304d;
+  font-size: 14px;
+}
+
+.pdf-upload-text small {
+  color: #68738c;
+  font-size: 12px;
+}
+

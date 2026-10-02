@@ -1,3 +1,4 @@
+import '../styling/CreateSchedule.css';
 import Sidebar from '../components/Sidebar.jsx';
 import Navigationbar from '../components/Navigationbar.jsx';
 import { useState } from 'react';
@@ -51,127 +52,166 @@ function CreateSchedule() {
 
   return (
     <>
-      <Navigationbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} isOpen={sidebarOpen} />
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Navigationbar
+        onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+        isOpen={sidebarOpen}
+      />
 
-      <div style={{ marginTop: '60px', padding: '20px' }}>
-        <h1>Create Schedule Plan</h1>
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+      <div className="create-schedule-page">
 
-        <form onSubmit={handleSubmit}>
+        <div className="create-schedule-container">
 
-          <div style={{ marginBottom: '16px' }}>
-            <label>Course Name</label>
-            <input
-              type="text"
-              value={formData.course}
-              onChange={(e) => setFormData({ ...formData, course: e.target.value })}
-              placeholder="e.g. Biology"
-              required
-              style={{ display: 'block', marginTop: '6px', padding: '8px', width: '100%' }}
-            />
-          </div>
+          <h1>Create Schedule Plan</h1>
 
-          <div style={{ marginBottom: '16px' }}>
-            <label>Total Days</label>
-            <input
-              type="number"
-              value={formData.totalDays}
-              onChange={(e) => setFormData({ ...formData, totalDays: e.target.value })}
-              placeholder="e.g. 10"
-              required
-              style={{ display: 'block', marginTop: '6px', padding: '8px', width: '100%' }}
-            />
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
-            <label>Upload PDF — pages counted automatically</label>
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={(e) => setPdfFile(e.target.files[0])}
-              style={{ display: 'block', marginTop: '6px' }}
-            />
-            {pdfFile && <p style={{ color: 'green', marginTop: '6px' }}>✅ {pdfFile.name} selected</p>}
-          </div>
-
-          {!pdfFile && (
-            <div style={{ marginBottom: '16px' }}>
-              <label>Total Pages — required if no PDF uploaded</label>
-              <input
-                type="number"
-                value={formData.totalPages}
-                onChange={(e) => setFormData({ ...formData, totalPages: e.target.value })}
-                placeholder="e.g. 200"
-                style={{ display: 'block', marginTop: '6px', padding: '8px', width: '100%' }}
-              />
-            </div>
+          {error && (
+            <p className="schedule-error">{error}</p>
           )}
 
-          <div style={{ marginBottom: '16px' }}>
-            <label>Study Sessions per day</label>
+          <form onSubmit={handleSubmit}>
 
-            {formData.studySessions.map((session, index) => (
-              <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
-                <span>Session {index + 1}:</span>
+            <div className="schedule-form-group">
+              <label>Course Name</label>
+
+              <input
+                type="text"
+                value={formData.course}
+                onChange={(e) => setFormData({ ...formData, course: e.target.value })}
+                placeholder="e.g. Biology"
+                required
+              />
+            </div>
+
+            <div className="schedule-form-group">
+              <label>Total Days</label>
+
+              <input
+                type="number"
+                value={formData.totalDays}
+                onChange={(e) => setFormData({ ...formData, totalDays: e.target.value })}
+                placeholder="e.g. 10"
+                required
+              />
+            </div>
+
+            <div className="schedule-form-group">
+              <label className="pdf-upload">
+  <span>Upload your PDF file</span>
+
+  <input
+    type="file"
+    accept=".pdf"
+    onChange={(e) => setPdfFile(e.target.files[0])}
+  />
+</label>
+
+              {pdfFile && (
+                <p className="pdf-selected">
+                  ✅ {pdfFile.name} selected
+                </p>
+              )}
+            </div>
+
+            {!pdfFile && (
+              <div className="schedule-form-group">
+                <label>Total Pages — required if no PDF uploaded</label>
+
                 <input
-                  type="time"
-                  value={session.startTime}
-                  onChange={(e) => {
-                    const updated = [...formData.studySessions];
-                    updated[index].startTime = e.target.value;
-                    setFormData({ ...formData, studySessions: updated });
-                  }}
-                  required
+                  type="number"
+                  value={formData.totalPages}
+                  onChange={(e) => setFormData({ ...formData, totalPages: e.target.value })}
+                  placeholder="e.g. 200"
                 />
-                <span>to</span>
-                <input
-                  type="time"
-                  value={session.endTime}
-                  onChange={(e) => {
-                    const updated = [...formData.studySessions];
-                    updated[index].endTime = e.target.value;
-                    setFormData({ ...formData, studySessions: updated });
-                  }}
-                  required
-                />
-                {formData.studySessions.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const updated = formData.studySessions.filter((_, i) => i !== index);
+              </div>
+            )}
+
+            <div className="schedule-form-group">
+              <label>Study Sessions per day</label>
+
+              {formData.studySessions.map((session, index) => (
+                <div key={index} className="session-row">
+
+                  <span className="session-label">
+                    Session {index + 1}:
+                  </span>
+
+                  <input
+                    type="time"
+                    value={session.startTime}
+                    onChange={(e) => {
+                      const updated = [...formData.studySessions];
+                      updated[index].startTime = e.target.value;
                       setFormData({ ...formData, studySessions: updated });
                     }}
-                    style={{ background: 'red', color: 'white', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer' }}
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
+                    required
+                  />
+
+                  <span className="session-to">to</span>
+
+                  <input
+                    type="time"
+                    value={session.endTime}
+                    onChange={(e) => {
+                      const updated = [...formData.studySessions];
+                      updated[index].endTime = e.target.value;
+                      setFormData({ ...formData, studySessions: updated });
+                    }}
+                    required
+                  />
+
+                  {formData.studySessions.length > 1 && (
+                    <button
+                      type="button"
+                      className="remove-session-btn"
+                      onClick={() => {
+                        const updated = formData.studySessions.filter(
+                          (_, i) => i !== index
+                        );
+
+                        setFormData({
+                          ...formData,
+                          studySessions: updated
+                        });
+                      }}
+                    >
+                      Remove
+                    </button>
+                  )}
+
+                </div>
+              ))}
+
+              <button
+                type="button"
+                className="add-session-btn"
+                onClick={() => setFormData({
+                  ...formData,
+                  studySessions: [
+                    ...formData.studySessions,
+                    { startTime: '', endTime: '' }
+                  ],
+                })}
+              >
+                + Add Another Session
+              </button>
+            </div>
 
             <button
-              type="button"
-              onClick={() => setFormData({
-                ...formData,
-                studySessions: [...formData.studySessions, { startTime: '', endTime: '' }],
-              })}
-              style={{ background: '#333', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', marginTop: '12px' }}
+              type="submit"
+              className="create-schedule-btn"
+              disabled={loading}
             >
-              + Add Another Session
+              {loading ? 'Creating...' : 'Create Schedule'}
             </button>
-          </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{ background: '#1a1a2e', color: 'white', border: 'none', padding: '10px 24px', borderRadius: '6px', cursor: 'pointer', marginTop: '10px', fontSize: '15px' }}
-          >
-            {loading ? 'Creating...' : 'Create Schedule'}
-          </button>
+          </form>
 
-        </form>
+        </div>
+
       </div>
     </>
   );
