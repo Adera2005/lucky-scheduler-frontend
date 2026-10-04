@@ -47,7 +47,7 @@ function Dashboard() {
 
       <div className="dashboard-header">
         <div>
-          <h1>Welcome, {studentName} 👋</h1>
+          <h1>Welcome, {studentName}</h1>
           <p>Manage your study schedules and keep track of your progress.</p>
         </div>
 

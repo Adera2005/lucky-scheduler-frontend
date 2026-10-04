@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api.js';
 import '../styling/Login.css';
+import eyeOpen from '../assets/eye-svgrepo-com.svg';
+import eyeClose from '../assets/eye-closed-svgrepo-com.svg'
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -75,10 +77,10 @@ function Login() {
                 required
               />
 
-              <span
+              <span 
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? '🙈' : '👁️'}
+                {showPassword ? <img src={eyeOpen} alt='Hide Password' height="20px" width="20px"/> :  <img  src={eyeClose} alt= "Show Password" height="20px" width="20px"/> }
               </span>
             </div>
           </div>

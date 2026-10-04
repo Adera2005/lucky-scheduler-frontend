@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api.js';
 import ReactMarkdown from 'react-markdown';
-
+import video from '../assets/clapperboard-play-svgrepo-com.svg';
 function Schedule() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -263,6 +263,7 @@ function Schedule() {
                   onClick={fetchVideos}
                   disabled={videoLoading}
                 >
+                  <img src= {video} alt='Play video image' width="20px" height="20px"/>
                   {videoLoading
                     ? 'Finding Videos...'
                     : 'Find Learning Videos'}

@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import "../styling/Sidebar.css";
+import dashboardIcon from '../assets/dashboard-alt-svgrepo-com.svg';
+import scheduleIcon from '../assets/note-edit-svgrepo-com.svg';
 
 function Sidebar({ isOpen, onClose }) {
   return (
@@ -10,11 +12,13 @@ function Sidebar({ isOpen, onClose }) {
 
       <nav className={`sidebar ${isOpen ? "sidebar-open" : ""}`}>
         <Link to="/dashboard" onClick={onClose}>
-          📊 Dashboard
+          <img src={dashboardIcon} alt="Dashboard Icon"  height="20px" width="20px"/>
+          Dashboard
         </Link>
 
         <Link to="/create-schedule" onClick={onClose}>
-          📅 Create Schedule
+          <img src={scheduleIcon} alt="Schedule Icon"  height="25px" width="25px"/>
+          Create Schedule
         </Link>
 
         <Link to="/assistant" onClick={onClose}>

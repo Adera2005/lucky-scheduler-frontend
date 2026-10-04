@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "../styling/Navigation.css";
+import groundBreaking from '../assets/groundbreaker-svgrepo-com.svg'
 
 function Navigationbar({ onMenuClick, isOpen }) {
   const navigate = useNavigate();
@@ -33,7 +34,8 @@ function Navigationbar({ onMenuClick, isOpen }) {
         </div>
 
         <h2 className="navigation-title">
-          📚 Lucky Scheduler
+          <img src={groundBreaking} alt="Ground breaking Image" height="30px" width="30px" />
+          Lucky Scheduler
         </h2>
 
       </div>
