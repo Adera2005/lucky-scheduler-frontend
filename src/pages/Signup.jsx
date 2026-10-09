@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api.js';
 import '../styling/Signup.css';
+import eyeOpen from '../assets/eye-svgrepo-com.svg';
+import eyeClose from '../assets/eye-closed-svgrepo-com.svg';
+
 
 function Signup() {
   const navigate = useNavigate();
@@ -9,6 +12,7 @@ function Signup() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,37 +88,55 @@ function Signup() {
         </div>
 
         {/* Password */}
-        <div className="signup-field">
-          <label>Password</label>
+<div className="signup-field">
+  <label>Password</label>
 
-          <input
-            type={showPassword ? 'text' : 'password'}
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            placeholder="Enter your password"
-            required
-          />
-        </div>
+  <div className="signup-password-box">
+    <input
+      type={showPassword ? 'text' : 'password'}
+      value={formData.password}
+      onChange={(e) =>
+        setFormData({ ...formData, password: e.target.value })
+      }
+      placeholder="Enter your password"
+      required
+    />
+<span onClick={() => setShowPassword(!showPassword)}>
+  {showPassword
+    ? <img src={eyeOpen} alt="Hide Password" />
+    : <img src={eyeClose} alt="Show Password" />
+  }
+</span>
+
+  </div>
+</div>
+
 
         {/* Confirm Password */}
-        <div className="signup-field">
-          <label>Confirm Password</label>
+<div className="signup-field">
+  <label>Confirm Password</label>
 
-          <input
-            type={showPassword ? 'text' : 'password'}
-            value={formData.confirmPassword}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                confirmPassword: e.target.value
-              })
-            }
-            placeholder="Confirm your password"
-            required
-          />
-        </div>
+  <div className="signup-password-box">
+    <input
+      type={showConfirmPassword ? 'text' : 'password'}
+      value={formData.confirmPassword}
+      onChange={(e) =>
+        setFormData({
+          ...formData,
+          confirmPassword: e.target.value
+        })
+      }
+      placeholder="Confirm your password"
+      required
+    />
+<span onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+  {showConfirmPassword
+    ? <img src={eyeOpen} alt="Hide Confirm Password" />
+    : <img src={eyeClose} alt="Show Confirm Password" />
+  }
+</span>
+  </div>
+</div>
 
         <button type="submit" disabled={loading}>
           {loading ? 'Creating account...' : 'SIGN UP'}

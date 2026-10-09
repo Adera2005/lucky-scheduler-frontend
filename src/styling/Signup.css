@@ -90,3 +90,37 @@ body {
   font-weight: bold;
   text-decoration: none;
 }
+/* Password input with eye icon */
+.signup-password-box {
+display: flex;
+align-items: center;
+border: 1px solid #dde5f4;
+border-radius: 8px;
+background: white;
+overflow: hidden;
+}
+
+.signup-password-box input {
+flex: 1;
+min-width: 0;
+border: none;
+outline: none;
+background: #f5f8ff;
+
+.signup-password-box {
+  background: #f5f8ff;
+}
+}
+
+.signup-password-box span {
+display: flex;
+align-items: center;
+padding: 0 12px;
+cursor: pointer;
+}
+
+.signup-password-box img {
+width: 20px;
+height: 20px;
+
+}
