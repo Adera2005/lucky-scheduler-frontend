@@ -72,6 +72,17 @@ body {
 
   display: flex;
   flex-direction: column;
+
+  /* Smooth transition for hover effect */
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+/* Hover effect — card lifts and glows */
+.schedule-card:hover {
+  box-shadow: 0 8px 28px rgba(91, 127, 214, 0.18);
+  transform: translateY(-4px);
+  border-color: #a8bfee;
 }
 
 /* Course name */

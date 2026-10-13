@@ -143,13 +143,12 @@ function Schedule() {
 
       if (schedule.pdfText) {
         // Use the beginning of the uploaded PDF as the search topic
-        searchTopic =
-          `${schedule.pdfText.substring(0, 100).trim()} tutorial`;
+        searchTopic = `${schedule.pdfText.substring(0, 100).trim()} tutorial`;
       } else {
         // If there is no PDF, use the course name
-        searchTopic =
-          `${schedule.course} tutorial`;
+        searchTopic = `${schedule.course} tutorial`;
       }
+
 
       console.log('YouTube search topic:', searchTopic);
 

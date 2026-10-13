@@ -6,6 +6,7 @@ import CreateSchedule from './pages/CreateSchedule.jsx'
 import EditSchedule from './pages/EditSchedule.jsx'
 import Schedule from './pages/Schedule.jsx'
 import Assistant from './pages/Assistant.jsx'
+import ViewSchedules from './pages/ViewSchedules.jsx'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/edit-schedule/:id" element={<EditSchedule />} />
         <Route path="/schedule/:id" element={<Schedule />} />
         <Route path="/assistant" element={<Assistant />} />
+        <Route path="/view-schedules" element={<ViewSchedules />} />
       </Routes>
     </>
   );

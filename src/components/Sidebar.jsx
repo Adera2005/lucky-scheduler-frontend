@@ -21,6 +21,10 @@ function Sidebar({ isOpen, onClose }) {
           Create Schedule
         </Link>
 
+        <Link to="/view-schedules" onClick={onClose}>
+          📋 View Schedules
+        </Link>
+
         <Link to="/assistant" onClick={onClose}>
           🤖 Study Assistant
         </Link>

@@ -132,7 +132,7 @@ function Dashboard() {
                 <div className="schedule-card-actions">
                   <Link to={`/schedule/${schedule.id}`}>
                     <button type="button" className="view-schedule-btn">
-                      View Schedule
+                      Go to Schedule
                     </button>
                   </Link>
 
