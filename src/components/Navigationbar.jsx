@@ -33,10 +33,15 @@ function Navigationbar({ onMenuClick, isOpen }) {
 
         </div>
 
-        <h2 className="navigation-title">
-          <img src={groundBreaking} alt="Ground breaking Image" height="30px" width="30px" />
-          Lucky Scheduler
-        </h2>
+       <div className="navigation-title">
+  <img
+    src={groundBreaking}
+    alt="Lucky Scheduler logo"
+    className="navigation-logo"
+  />
+
+  <span className="font">Lucky Scheduler</span>
+</div>
 
       </div>
 

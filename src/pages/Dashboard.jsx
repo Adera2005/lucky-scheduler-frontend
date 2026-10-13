@@ -13,23 +13,38 @@ function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const studentName = localStorage.getItem('name') || 'Student';
 
-  useEffect(() => {
-    const fetchSchedules = async () => {
-      try {
-        const response = await api.get('/api/schedules');
-        setSchedules(response.data.data.schedules);
-      } catch (err) {
-        if (err.response?.status === 401) {
-          navigate('/');
-        } else {
-          setError('Failed to load schedules.');
-        }
-      } finally {
-        setLoading(false);
+  const fetchSchedules = async () => {
+    try {
+      const response = await api.get('/api/schedules');
+      setSchedules(response.data.data.schedules);
+    } catch (err) {
+      if (err.response?.status === 401) {
+        navigate('/');
+      } else {
+        setError('Failed to load schedules.');
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchSchedules();
   }, []);
+
+  const handleDeleteSchedule = async (scheduleId, courseName) => {
+    const confirmed = window.confirm(
+      `Delete "${courseName}"? This cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    try {
+      await api.delete(`/api/schedules/${scheduleId}`);
+      setSchedules((prev) => prev.filter((s) => s.id !== scheduleId));
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to delete schedule.');
+    }
+  };
 
   return (
   <>
@@ -114,11 +129,29 @@ function Dashboard() {
                   
                 </div>
 
-                <Link to={`/schedule/${schedule.id}`}>
-                  <button className="view-schedule-btn">
-                    View Schedule
+                <div className="schedule-card-actions">
+                  <Link to={`/schedule/${schedule.id}`}>
+                    <button type="button" className="view-schedule-btn">
+                      View Schedule
+                    </button>
+                  </Link>
+
+                  <Link to={`/edit-schedule/${schedule.id}`}>
+                    <button type="button" className="edit-schedule-btn">
+                      Edit
+                    </button>
+                  </Link>
+
+                  <button
+                    type="button"
+                    className="delete-schedule-btn"
+                    onClick={() =>
+                      handleDeleteSchedule(schedule.id, schedule.course)
+                    }
+                  >
+                    Delete
                   </button>
-                </Link>
+                </div>
 
               </div>
 

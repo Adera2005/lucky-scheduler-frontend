@@ -260,3 +260,30 @@
   font-size: 12px;
 }
 
+.edit-schedule-note {
+  font-size: 13px;
+  color: #6b7590;
+  text-align: left;
+  margin: -10px 0 20px;
+  line-height: 1.5;
+}
+
+.schedule-loading {
+  color: #6b7590;
+}
+
+.current-pdf-row {
+  text-align: left;
+  margin-top: 10px;
+}
+
+.remove-pdf-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #4a6cc4;
+  margin-top: 8px;
+  cursor: pointer;
+}
+

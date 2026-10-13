@@ -104,10 +104,17 @@ body {
   margin: 8px 0;
   color: #4a6cc4;
 }
-.schedule-card > a {
+.schedule-card-actions {
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schedule-card-actions a {
   text-decoration: none;
 }
+
 /* View schedule button */
 .view-schedule-btn {
   width: 100%;
@@ -123,6 +130,37 @@ body {
 
 .view-schedule-btn:hover {
   background: #4a6cc4;
+}
+
+.edit-schedule-btn,
+.delete-schedule-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.edit-schedule-btn {
+  background: #eef2fb;
+  color: #4a6cc4;
+  border: 1px solid #c5d4f5;
+}
+
+.edit-schedule-btn:hover {
+  background: #dfe8fb;
+}
+
+.delete-schedule-btn {
+  background: #fff5f5;
+  color: #c0392b;
+  border: 1px solid #f5c6cb;
+}
+
+.delete-schedule-btn:hover {
+  background: #ffe5e5;
 }
 
 /* No schedules message */
@@ -154,3 +192,4 @@ body {
   border-radius: 8px;
   padding: 12px;
 }
+
