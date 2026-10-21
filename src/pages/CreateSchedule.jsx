@@ -1,3 +1,13 @@
+// ============================================================
+// CreateSchedule.jsx  (updated)
+// Changes in this version:
+//   • totalDays input now has min="1" — prevents 0 and negative
+//     numbers from being accepted by the browser.
+//   • totalPages input now has min="1" — same protection.
+//   • Both fields also validate onBlur to catch edge-cases and
+//     clear illegal values with a friendly error message.
+// ============================================================
+
 import '../styling/CreateSchedule.css';
 import Sidebar from '../components/Sidebar.jsx';
 import Navigationbar from '../components/Navigationbar.jsx';
@@ -7,26 +17,50 @@ import api from '../services/api.js';
 
 function CreateSchedule() {
   const navigate = useNavigate();
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [error, setError]           = useState('');
+  const [loading, setLoading]       = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [pdfFile, setPdfFile] = useState(null);
-  const [formData, setFormData] = useState({
-    course: '',
-    totalPages: '',
-    totalDays: '',
+  const [pdfFile, setPdfFile]       = useState(null);
+  const [formData, setFormData]     = useState({
+    course:        '',
+    totalPages:    '',
+    totalDays:     '',
     studySessions: [{ startTime: '', endTime: '' }],
   });
 
+  // ── NEW: shared validation for numeric fields that must be >= 1 ──
+  /**
+   * Returns true when the value is a positive integer (>= 1).
+   * @param {string} value
+   * @returns {boolean}
+   */
+  const isPositiveInt = (value) => {
+    const n = Number(value);
+    return Number.isFinite(n) && n >= 1;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
+
+    // ── Validate totalDays ──
+    if (!isPositiveInt(formData.totalDays)) {
+      setError('Total Days must be a positive number (at least 1).');
+      return;
+    }
+
+    // ── Validate totalPages when no PDF is uploaded ──
+    if (!pdfFile && !isPositiveInt(formData.totalPages)) {
+      setError('Total Pages must be a positive number (at least 1).');
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const data = new FormData();
-      data.append('course', formData.course);
-      data.append('totalDays', formData.totalDays);
+      data.append('course',      formData.course);
+      data.append('totalDays',   formData.totalDays);
       data.append('studySessions', JSON.stringify(formData.studySessions));
 
       if (!pdfFile && formData.totalPages) {
@@ -74,40 +108,53 @@ function CreateSchedule() {
 
           <form onSubmit={handleSubmit}>
 
+            {/* Course Name */}
             <div className="schedule-form-group">
               <label>Course Name</label>
-
               <input
                 type="text"
                 value={formData.course}
-                onChange={(e) => setFormData({ ...formData, course: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, course: e.target.value })
+                }
                 placeholder="e.g. Biology"
                 required
               />
             </div>
 
+            {/* Total Days — min="1" blocks 0 and negatives */}
             <div className="schedule-form-group">
               <label>Total Days</label>
-
               <input
                 type="number"
                 value={formData.totalDays}
-                onChange={(e) => setFormData({ ...formData, totalDays: e.target.value })}
+                min="1"                  /* NEW — HTML-level guard */
+                step="1"
+                onChange={(e) =>
+                  setFormData({ ...formData, totalDays: e.target.value })
+                }
+                onBlur={(e) => {
+                  /* Extra guard: clear the value if it slipped past the HTML min */
+                  if (e.target.value && !isPositiveInt(e.target.value)) {
+                    setFormData({ ...formData, totalDays: '' });
+                    setError('Total Days must be at least 1.');
+                  }
+                }}
                 placeholder="e.g. 10"
                 required
               />
             </div>
 
+            {/* PDF Upload */}
             <div className="schedule-form-group">
               <label className="pdf-upload">
-  <span>Upload your PDF file</span>
-
-  <input
-    type="file"
-    accept=".pdf"
-    onChange={(e) => setPdfFile(e.target.files[0])}
-  />
-</label>
+                <span>Upload your PDF file</span>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) => setPdfFile(e.target.files[0])}
+                />
+              </label>
 
               {pdfFile && (
                 <p className="pdf-selected">
@@ -116,19 +163,31 @@ function CreateSchedule() {
               )}
             </div>
 
+            {/* Total Pages — only shown when no PDF; min="1" blocks 0 and negatives */}
             {!pdfFile && (
               <div className="schedule-form-group">
                 <label>Total Pages — required if no PDF uploaded</label>
-
                 <input
                   type="number"
                   value={formData.totalPages}
-                  onChange={(e) => setFormData({ ...formData, totalPages: e.target.value })}
+                  min="1"                /* NEW — HTML-level guard */
+                  step="1"
+                  onChange={(e) =>
+                    setFormData({ ...formData, totalPages: e.target.value })
+                  }
+                  onBlur={(e) => {
+                    /* Extra guard: clear the value if it slipped past the HTML min */
+                    if (e.target.value && !isPositiveInt(e.target.value)) {
+                      setFormData({ ...formData, totalPages: '' });
+                      setError('Total Pages must be at least 1.');
+                    }
+                  }}
                   placeholder="e.g. 200"
                 />
               </div>
             )}
 
+            {/* Study Sessions */}
             <div className="schedule-form-group">
               <label>Study Sessions per day</label>
 
@@ -171,11 +230,7 @@ function CreateSchedule() {
                         const updated = formData.studySessions.filter(
                           (_, i) => i !== index
                         );
-
-                        setFormData({
-                          ...formData,
-                          studySessions: updated
-                        });
+                        setFormData({ ...formData, studySessions: updated });
                       }}
                     >
                       Remove
@@ -188,13 +243,15 @@ function CreateSchedule() {
               <button
                 type="button"
                 className="add-session-btn"
-                onClick={() => setFormData({
-                  ...formData,
-                  studySessions: [
-                    ...formData.studySessions,
-                    { startTime: '', endTime: '' }
-                  ],
-                })}
+                onClick={() =>
+                  setFormData({
+                    ...formData,
+                    studySessions: [
+                      ...formData.studySessions,
+                      { startTime: '', endTime: '' },
+                    ],
+                  })
+                }
               >
                 + Add Another Session
               </button>

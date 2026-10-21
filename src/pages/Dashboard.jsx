@@ -1,4 +1,4 @@
-import '../styling/Dashboard.css'
+import '../styling/Dashboard.css';
 import Sidebar from '../components/Sidebar.jsx';
 import Navigationbar from '../components/Navigationbar.jsx';
 import { useState, useEffect } from 'react';
@@ -126,7 +126,6 @@ function Dashboard() {
                       {session.startTime} - {session.endTime}
                     </p>
                   ))}
-                  
                 </div>
 
                 <div className="schedule-card-actions">

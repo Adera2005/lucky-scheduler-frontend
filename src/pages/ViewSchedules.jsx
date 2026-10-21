@@ -131,7 +131,7 @@ function ViewSchedules() {
                 <div className="vs-card-actions">
                   <Link to={`/schedule/${schedule.id}`}>
                     <button type="button" className="vs-view-btn">
-                      View Schedule
+                      Go to Schedule
                     </button>
                   </Link>
 

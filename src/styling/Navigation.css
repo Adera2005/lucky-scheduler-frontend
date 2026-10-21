@@ -1,6 +1,19 @@
+/* ============================================================
+   Navigation.css
+   Styles the fixed top navigation bar.
+
+   Layout strategy:
+     The nav uses position:relative as the positioning context.
+     The hamburger sits on the left, the logout button on the right.
+     The logo + title block is absolutely centred using
+     left:50% / transform:translateX(-50%) so it stays perfectly
+     in the middle of the bar on every screen size.
+   ============================================================ */
+
 .navigationbar {
-  background: #8fa8e8;
-  padding: 10px 20px;
+  background: #5b7fd6;           /* solid brand blue (richer than the old muted blue) */
+  padding: 0 20px;
+  height: 64px;                  /* fixed height so all children align nicely */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9,19 +22,16 @@
   width: 100%;
   z-index: 1000;
   box-sizing: border-box;
+  box-shadow: 0 2px 12px rgba(74, 108, 196, 0.25);  /* subtle depth shadow */
 }
 
-.navigation-left {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
+/* ── Hamburger button (left) ── */
 .menu-button {
   cursor: pointer;
   width: 36px;
   height: 36px;
   position: relative;
+  flex-shrink: 0;
 }
 
 .hamburger,
@@ -36,20 +46,68 @@
   transition: opacity 0.3s ease;
 }
 
-.hamburger {
-  opacity: 1;
+.hamburger        { opacity: 1; }
+.hamburger.hidden { opacity: 0; }
+
+.close-icon         { opacity: 0; }
+.close-icon.visible { opacity: 1; }
+
+/* ── Centre block: logo + app name ── */
+/* Absolute positioning keeps it perfectly centred regardless of   */
+/* how wide the hamburger or logout button are.                    */
+.navigation-centre {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;   /* clicks pass through to elements behind */
 }
 
-.hamburger.hidden {
-  opacity: 0;
+/* Logo image */
+.navigation-logo {
+  display: block;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
-.close-icon {
-  opacity: 0;
+/* "Lucky Scheduler" text */
+.navigation-app-name {
+  color: white;
+  font-size: 26px;
+  font-family: cursive;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
 }
 
-.close-icon.visible {
-  opacity: 1;
+/* ── Logout button (right) ── */
+.logout-button {
+  background: white;
+  color: #4a6cc4;
+  border: none;
+  padding: 9px 20px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.logout-button:hover {
+  background: #eaf0fc;
+}
+
+/* ── Legacy classes kept for backward compatibility ── */
+/* (used by older JSX that hasn't been touched)        */
+.navigation-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .navigation-title {
@@ -62,29 +120,7 @@
   line-height: 1;
 }
 
-.navigation-logo {
-  display: block;
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-.logout-button {
-  background: white;
-  color: #4a6cc4;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.logout-button:hover {
-  background: #eaf0fc;
-}
-.font{
+.font {
   font-size: 35px;
   font-family: cursive;
 }

@@ -204,3 +204,39 @@ body {
   padding: 12px;
 }
 
+/* ============================================================
+   Dashboard hero banner — centered logo + title
+   NEW styles added in this update (appended to Dashboard.css)
+   ============================================================ */
+
+/* Hero banner: sits at the very top of the dashboard content area */
+.dashboard-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px 20px 24px;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #dde5f4;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 18px rgba(91, 127, 214, 0.09);
+}
+
+/* Logo image inside the hero banner */
+.dashboard-hero-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+/* "Lucky Scheduler" heading inside the hero banner */
+.dashboard-hero-title {
+  margin: 0;
+  font-size: 36px;
+  font-family: cursive;
+  color: #4a6cc4;
+  letter-spacing: 1px;
+  text-align: center;
+}

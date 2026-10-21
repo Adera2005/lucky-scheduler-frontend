@@ -287,3 +287,127 @@
 .youtube-watch-btn:hover {
   background: #4a6cc4;
 }
+/* ============================================================
+   Schedule.css — NEW additions (appended in this update)
+   Covers:
+     • .day-group-card   — one card per day, with hover/shadow effect
+     • .day-group-header — day heading row inside the card
+     • .session-time-label — "Session N" label in each session row
+     • .ai-custom-box    — wrapper for the custom AI question area
+     • .ai-custom-input  — the textarea for the user's own question
+     • .ai-custom-ask-btn — "Ask AI" submit button
+   ============================================================ */
+
+/* ── Day group card ── */
+/* Contains ALL sessions for a single day.                        */
+/* The hover effect lifts the card and adds a blue glow shadow.   */
+.day-group-card {
+  background: white;
+  border: 1px solid #dde5f4;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+
+  /* Smooth transition so the shadow animation feels natural */
+  transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.22s ease;
+}
+
+.day-group-card:hover {
+  /* Lift the card 4px and show a soft blue shadow */
+  transform: translateY(-4px);
+  box-shadow: 0 10px 32px rgba(91, 127, 214, 0.18);
+  border-color: #a8bfee;
+  cursor: default;
+}
+
+.day-group-card:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Day heading row ── */
+.day-group-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eef2fb;
+}
+
+.day-group-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #4a6cc4;
+  font-weight: 700;
+}
+
+/* ── Session label inside a day card ── */
+/* Replaces the old "Day N" h3 since that info now lives in the   */
+/* day-group-header.                                              */
+.session-time-label {
+  font-weight: 700;
+  color: #24304d;
+  font-size: 14px;
+}
+
+/* ── Custom AI question area ── */
+.ai-custom-box {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 12px;
+}
+
+/* Textarea for the user's own question */
+.ai-custom-input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 12px;
+  border: 1px solid #c5d4f5;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  color: #24304d;
+  background: #f5f8ff;
+  resize: vertical;
+  line-height: 1.5;
+  transition: border-color 0.2s ease;
+}
+
+.ai-custom-input:focus {
+  outline: none;
+  border-color: #5b7fd6;
+  box-shadow: 0 0 0 3px rgba(91, 127, 214, 0.12);
+}
+
+.ai-custom-input::placeholder {
+  color: #a0aec0;
+}
+
+.ai-custom-input:disabled {
+  opacity: 0.6;
+}
+
+/* "Ask AI" button next to the custom textarea */
+.ai-custom-ask-btn {
+  background: #5b7fd6;
+  color: white;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  align-self: flex-end;
+  transition: background 0.2s ease;
+}
+
+.ai-custom-ask-btn:hover {
+  background: #4a6cc4;
+}
+
+.ai-custom-ask-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
