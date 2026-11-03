@@ -63,6 +63,7 @@ function Signup() {
       });
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('name', response.data.data.student.name);
+      localStorage.setItem('userId', response.data.data.student.id);
       navigate('/dashboard');
     } catch (err) {
       setError(

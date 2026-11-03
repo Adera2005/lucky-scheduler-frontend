@@ -1,61 +1,169 @@
 // ============================================================
-// Schedule.jsx  (updated)
-// Changes in this version:
-//   1. Imports useStudyNotifications hook — schedules a 30-minute
-//      reminder and a "start reading" alert for each pending task.
-//   2. Groups tasks by day number so all sessions for the same day
-//      appear inside ONE white card (instead of separate cards).
-//   3. Hover / shadow effect on day cards (via CSS class
-//      "day-group-card" added in Schedule.css).
-//   4. Adds a custom AI text-box below the smart AI buttons so the
-//      user can type their own question for a specific page range.
+// Schedule.jsx
+// Three-column study page with:
+//   • Draggable column dividers
+//   • Overall + per-day progress bars
+//   • AM/PM time formatting on all session times
+//   • Week / month accordion grouping (11+ days → weeks,
+//     28+ days → months → weeks)  — via GroupedTaskList
+//   • Sessions column shows ALL content without hiding/clipping
+//   • Per-user notification bell
+//   • Dark / light mode via CSS custom properties
 // ============================================================
 
 import '../styling/Schedule.css';
-import Sidebar from '../components/Sidebar.jsx';
-import Navigationbar from '../components/Navigationbar.jsx';
-import { useState, useEffect } from 'react';
+import Sidebar          from '../components/Sidebar.jsx';
+import Navigationbar    from '../components/Navigationbar.jsx';
+import GroupedTaskList  from '../components/GroupedTaskList.jsx';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../services/api.js';
-import ReactMarkdown from 'react-markdown';
-import video from '../assets/clapperboard-play-svgrepo-com.svg';
-// NEW — study session notifications hook
+import api              from '../services/api.js';
+import video            from '../assets/clapperboard-play-svgrepo-com.svg';
 import useStudyNotifications from '../hooks/useStudyNotifications.js';
+import { groupTasksByPeriod } from '../utils/groupDays.js';
+import { formatTimeRange }    from '../utils/timeFormat.js';
+import { getUserId }          from '../utils/auth.js';
+
+const API_BASE   = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const MIN_COL_PX = 180;
+
+// ── Sessions dropdown chip ─────────────────────────────────
+// Shows the first session time as a chip. If there are multiple
+// sessions, clicking it opens a small dropdown listing all of them.
+function SessionsChip({ sessions }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  if (!sessions || sessions.length === 0) return null;
+
+  const first = sessions[0];
+  const hasMore = sessions.length > 1;
+
+  return (
+    <div className="sessions-chip-wrapper" ref={ref}>
+      <button
+        className={`summary-chip sessions-chip-btn ${open ? 'sessions-chip-btn--open' : ''}`}
+        onClick={() => hasMore && setOpen((v) => !v)}
+        aria-expanded={hasMore ? open : undefined}
+        style={{ cursor: hasMore ? 'pointer' : 'default' }}
+      >
+        🕐 {formatTimeRange(first.startTime, first.endTime)}
+        {hasMore && (
+          <span className="sessions-chip-more">
+            +{sessions.length - 1} more {open ? '▲' : '▼'}
+          </span>
+        )}
+      </button>
+
+      {open && hasMore && (
+        <div className="sessions-chip-dropdown">
+          <p className="sessions-chip-dropdown-label">All study sessions</p>
+          {sessions.map((s, i) => (
+            <div className="sessions-chip-dropdown-item" key={s.id ?? i}>
+              <span className="sessions-chip-dropdown-num">Session {i + 1}</span>
+              <span>{formatTimeRange(s.startTime, s.endTime)}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function Schedule() {
-  const { id } = useParams();
+  const { id }   = useParams();
   const navigate = useNavigate();
 
-  const [schedule, setSchedule] = useState(null);
-  const [loading, setLoading]   = useState(true);
-  const [error, setError]       = useState('');
+  const userId = getUserId();
+
+  // ── Layout state ───────────────────────────────────────────
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const [aiHelp, setAiHelp]       = useState({});
-  const [aiLoading, setAiLoading] = useState({});
+  // Percentage widths for the 3 data columns (handles sit between them)
+  const [colWidths, setColWidths] = useState([26, 43, 31]);
+  const layoutRef = useRef(null);
+  const dragging  = useRef(null);
 
-  // NEW — custom question per task index
+  // ── Schedule data ──────────────────────────────────────────
+  const [schedule, setSchedule] = useState(null);
+  const [loading,  setLoading]  = useState(true);
+  const [error,    setError]    = useState('');
+
+  // ── AI state (keyed by "day-sessionIndex") ─────────────────
+  const [aiHelp,         setAiHelp]         = useState({});
+  const [aiLoading,      setAiLoading]      = useState({});
   const [customQuestion, setCustomQuestion] = useState({});
 
-  // YouTube
-  const [videos, setVideos]           = useState([]);
+  // ── YouTube state ──────────────────────────────────────────
+  const [videos,       setVideos]       = useState([]);
   const [videoLoading, setVideoLoading] = useState(false);
-  const [videoError, setVideoError]   = useState('');
+  const [videoError,   setVideoError]   = useState('');
 
-  // NEW — register study notifications whenever the schedule loads
-  useStudyNotifications(schedule);
+  // Register browser + in-app notifications
+  useStudyNotifications(schedule, userId);
+
+  useEffect(() => { fetchSchedule(); }, [id]);
+
+  // ── Draggable column logic ─────────────────────────────────
+
+  const onDragStart = useCallback((e, handle) => {
+    e.preventDefault();
+    dragging.current = {
+      handle,
+      startX:      e.clientX,
+      startWidths: [...colWidths],
+    };
+  }, [colWidths]);
+
+  const onDragMove = useCallback((e) => {
+    if (!dragging.current || !layoutRef.current) return;
+    const { handle, startX, startWidths } = dragging.current;
+    const containerW = layoutRef.current.offsetWidth;
+    const deltaX     = e.clientX - startX;
+    const deltaPct   = (deltaX / containerW) * 100;
+    const minPct     = (MIN_COL_PX / containerW) * 100;
+
+    const w = [...startWidths];
+
+    if (handle === 0) {
+      w[0] = Math.max(minPct, Math.min(startWidths[0] + deltaPct, 100 - minPct * 2));
+      w[1] = startWidths[1] - (w[0] - startWidths[0]);
+    } else {
+      w[1] = Math.max(minPct, Math.min(startWidths[1] + deltaPct, 100 - minPct * 2));
+      w[2] = startWidths[2] - (w[1] - startWidths[1]);
+    }
+
+    if (w.every((x) => x >= minPct)) setColWidths(w);
+  }, []);
+
+  const onDragEnd = useCallback(() => { dragging.current = null; }, []);
 
   useEffect(() => {
-    fetchSchedule();
-  }, [id]);
+    window.addEventListener('mousemove', onDragMove);
+    window.addEventListener('mouseup',   onDragEnd);
+    return () => {
+      window.removeEventListener('mousemove', onDragMove);
+      window.removeEventListener('mouseup',   onDragEnd);
+    };
+  }, [onDragMove, onDragEnd]);
+
+  // ── Data fetch ─────────────────────────────────────────────
 
   const fetchSchedule = async () => {
     try {
-      const response = await api.get(`/api/schedules/${id}`);
-      console.log('Schedule response:', response.data);
-      setSchedule(response.data.data.schedule);
+      const res = await api.get(`/api/schedules/${id}`);
+      setSchedule(res.data.data.schedule);
     } catch (err) {
-      console.error('Schedule error:', err);
       if (err.response?.status === 401 || err.response?.status === 403) {
         navigate('/');
       } else {
@@ -66,30 +174,30 @@ function Schedule() {
     }
   };
 
-  // Mark task as complete
+  // ── Task actions ───────────────────────────────────────────
+
   const completeTask = async (taskId) => {
     try {
       await api.patch(`/api/schedules/${id}/complete-session/${taskId}`);
       await fetchSchedule();
-    } catch (err) {
+    } catch {
       alert('Failed to mark task complete.');
     }
   };
 
-  // Reschedule one task
   const rescheduleSingleSession = async (taskId) => {
     try {
       await api.patch(`/api/schedules/${id}/reschedule-session/${taskId}`);
       await fetchSchedule();
-    } catch (err) {
+    } catch {
       alert('Failed to reschedule session.');
     }
   };
 
-  // AI helper — preset buttons
-  const askSessionAI = async (task, index, promptType) => {
-    const pages = `${task.pageStart}–${task.pageEnd}`;
+  // ── AI helpers ─────────────────────────────────────────────
 
+  const askSessionAI = async (task, aiKey, promptType) => {
+    const pages   = `${task.pageStart}–${task.pageEnd}`;
     const prompts = {
       simplify:  `Simplify the key concepts from pages ${pages} of ${schedule.course} in very simple terms.`,
       summarise: `Give a concise summary of what is covered in pages ${pages} of ${schedule.course}.`,
@@ -97,115 +205,87 @@ function Schedule() {
       quiz:      `Generate 5 quiz questions based on pages ${pages} of ${schedule.course}.`,
       explain:   `Explain what is covered in pages ${pages} of ${schedule.course} as if I am a complete beginner.`,
     };
-
-    await callAI(index, prompts[promptType], pages);
+    await callAI(aiKey, prompts[promptType], pages);
   };
 
-  // NEW — AI helper — custom question typed by the user
-  const askCustomQuestion = async (task, index) => {
-    const question = (customQuestion[index] || '').trim();
+  const askCustomQuestion = async (task, aiKey) => {
+    const question = (customQuestion[aiKey] || '').trim();
     if (!question) return;
-
     const pages = `${task.pageStart}–${task.pageEnd}`;
-    const prompt = `${question} (Context: pages ${pages} of ${schedule.course})`;
-    await callAI(index, prompt, pages);
+    await callAI(aiKey, `${question} (Context: pages ${pages} of ${schedule.course})`, pages);
   };
 
-  // Shared AI call logic used by both preset and custom paths
-  const callAI = async (index, prompt, pages) => {
-    setAiLoading((prev) => ({ ...prev, [index]: true }));
-    setAiHelp((prev)   => ({ ...prev, [index]: null }));
-
+  const callAI = async (aiKey, prompt, pages) => {
+    setAiLoading((p) => ({ ...p, [aiKey]: true  }));
+    setAiHelp   ((p) => ({ ...p, [aiKey]: null  }));
     try {
-      const response = await api.post(
-        '/api/schedules/assistant/ask-context',
-        {
-          question: prompt,
-          course:   schedule.course,
-          pdfText:  schedule.pdfText || null,
-          pages,
-        }
-      );
-
-      setAiHelp((prev) => ({
-        ...prev,
-        [index]: response.data.data.answer,
-      }));
-    } catch (err) {
-      console.error('AI error:', err);
-      setAiHelp((prev) => ({
-        ...prev,
-        [index]: 'AI assistant is currently busy. Please wait a moment and try again.',
+      const res = await api.post('/api/schedules/assistant/ask-context', {
+        question: prompt,
+        course:   schedule.course,
+        pdfText:  schedule.pdfText || null,
+        pages,
+      });
+      setAiHelp((p) => ({ ...p, [aiKey]: res.data.data.answer }));
+    } catch {
+      setAiHelp((p) => ({
+        ...p,
+        [aiKey]: 'AI assistant is currently busy. Please wait a moment and try again.',
       }));
     } finally {
-      setAiLoading((prev) => ({ ...prev, [index]: false }));
+      setAiLoading((p) => ({ ...p, [aiKey]: false }));
     }
   };
 
-  // YouTube
+  const handleCustomChange = (aiKey, value) => {
+    setCustomQuestion((p) => ({ ...p, [aiKey]: value }));
+  };
+
+  // ── YouTube ────────────────────────────────────────────────
+
   const fetchVideos = async () => {
     setVideoLoading(true);
     setVideoError('');
     setVideos([]);
-
     try {
-      let searchTopic;
-      if (schedule.pdfText) {
-        searchTopic = `${schedule.pdfText.substring(0, 100).trim()} tutorial`;
-      } else {
-        searchTopic = `${schedule.course} tutorial`;
-      }
-
-      console.log('YouTube search topic:', searchTopic);
-      const response = await api.get(
-        `/api/schedules/youtube/search?topic=${encodeURIComponent(searchTopic)}`
-      );
-      console.log('YouTube response:', response.data);
-
-      const fetchedVideos = response.data?.data?.videos || [];
-      console.log('Videos found:', fetchedVideos);
-      setVideos(fetchedVideos);
-
-      if (fetchedVideos.length === 0) {
-        setVideoError('No videos were found for this study material.');
-      }
+      const topic = schedule.pdfText
+        ? `${schedule.pdfText.substring(0, 100).trim()} tutorial`
+        : `${schedule.course} tutorial`;
+      const res     = await api.get(`/api/schedules/youtube/search?topic=${encodeURIComponent(topic)}`);
+      const fetched = res.data?.data?.videos || [];
+      setVideos(fetched);
+      if (!fetched.length) setVideoError('No videos found for this material.');
     } catch (err) {
-      console.error('YouTube error:', err);
-      setVideoError(
-        err.response?.data?.message || 'Failed to fetch YouTube videos.'
-      );
+      setVideoError(err.response?.data?.message || 'Failed to fetch videos.');
     } finally {
       setVideoLoading(false);
     }
   };
 
-  const smartButtons = [
-    { key: 'simplify',  label: '📝 Simplify'   },
-    { key: 'summarise', label: '📋 Summarise'  },
-    { key: 'keypoints', label: '🔑 Key Points' },
-    { key: 'quiz',      label: '❓ Quiz Me'    },
-    { key: 'explain',   label: '🔰 Explain'    },
-  ];
+  // ── Progress calculation ───────────────────────────────────
 
-  // ── NEW: Group tasks by day number ──
-  /**
-   * Takes a flat array of task objects and returns an ordered array
-   * of { day, tasks[] } groups.
-   *
-   * @param {Array} tasks - flat list of task objects from the API
-   * @returns {Array<{ day: number, tasks: Array }>}
-   */
-  const groupByDay = (tasks) => {
-    const map = new Map();
-    tasks.forEach((task) => {
-      if (!map.has(task.day)) map.set(task.day, []);
-      map.get(task.day).push(task);
-    });
-    // Sort by day number ascending
-    return Array.from(map.entries())
-      .sort(([a], [b]) => a - b)
-      .map(([day, tasks]) => ({ day, tasks }));
+  const getProgress = () => {
+    if (!schedule?.tasks?.length) return { done: 0, total: 0, pct: 0 };
+    const total = schedule.tasks.length;
+    const done  = schedule.tasks.filter((t) => t.completed).length;
+    return { done, total, pct: Math.round((done / total) * 100) };
   };
+
+  // ── PDF URL ────────────────────────────────────────────────
+
+  const pdfUrl = schedule?.fileUrl
+    ? schedule.fileUrl.startsWith('http')
+      ? schedule.fileUrl
+      : `${API_BASE.replace(/\/$/, '')}/${schedule.fileUrl.replace(/^\//, '')}`
+    : null;
+
+  const progress = getProgress();
+
+  // Group tasks by period (flat / weeks / months)
+  const grouped = schedule?.tasks
+    ? groupTasksByPeriod(schedule.tasks, schedule.totalDays)
+    : null;
+
+  // ── Render ─────────────────────────────────────────────────
 
   return (
     <>
@@ -213,68 +293,82 @@ function Schedule() {
         onMenuClick={() => setSidebarOpen(!sidebarOpen)}
         isOpen={sidebarOpen}
       />
-
-      <Sidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="schedule-page">
 
-        {loading && <p>Loading schedule...</p>}
-        {error   && <p>{error}</p>}
+        {loading && <p className="schedule-state-msg">Loading schedule…</p>}
+        {error   && <p className="schedule-state-msg schedule-state-error">{error}</p>}
 
         {schedule && (
           <>
-            {/* HEADER */}
+            {/* ── Header ── */}
             <div className="schedule-header">
-
               <h1>{schedule.course} — Study Schedule</h1>
 
               <div className="schedule-summary">
-                <p>Total Pages: {schedule.totalPages}</p>
-                <p>Total Days:  {schedule.totalDays}</p>
-                <p>Pages per day: {schedule.pagesPerDay}</p>
+                <span className="summary-chip">📄 {schedule.totalPages} pages</span>
+                <span className="summary-chip">📅 {schedule.totalDays} days</span>
+                <span className="summary-chip">📖 {schedule.pagesPerDay} pages/day</span>
+                <SessionsChip sessions={schedule.sessions} />
               </div>
 
               {schedule.pdfText && (
-                <p className="pdf-status">
-                  PDF content loaded — AI responses will be based on your document.
-                </p>
+                <p className="pdf-status">✅ PDF loaded — AI answers are based on your document.</p>
               )}
 
+              {/* Overall progress bar */}
+              <div className="progress-wrapper">
+                <div className="progress-label-row">
+                  <span className="progress-label">Overall Progress</span>
+                  <span className="progress-pct">{progress.pct}%</span>
+                </div>
+                <div
+                  className="progress-track"
+                  role="progressbar"
+                  aria-valuenow={progress.pct}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label={`${progress.pct}% complete`}
+                >
+                  <div className="progress-fill" style={{ width: `${progress.pct}%` }} />
+                </div>
+                <p className="progress-sublabel">
+                  {progress.done} of {progress.total} sessions completed
+                  {progress.pct === 100 ? ' 🎉 All done!' : ''}
+                </p>
+              </div>
             </div>
 
-            {/* TWO COLUMNS */}
-            <div className="schedule-layout">
+            {/* ── THREE-COLUMN LAYOUT ── */}
+            <div
+              className="schedule-layout"
+              ref={layoutRef}
+              style={{
+                gridTemplateColumns: `${colWidths[0]}% 8px ${colWidths[1]}% 8px ${colWidths[2]}%`,
+              }}
+            >
 
-              {/* LEFT: YOUTUBE */}
-              <section className="youtube-section">
-
-                <h2>Learning Videos</h2>
-                <p>Find videos related to your study document.</p>
+              {/* ── Column 1: YouTube ── */}
+              <section className="col-panel youtube-section">
+                <h2>🎬 Learning Videos</h2>
+                <p className="col-subtitle">Find videos related to your study material.</p>
 
                 <button
                   className="youtube-search-btn"
                   onClick={fetchVideos}
                   disabled={videoLoading}
                 >
-                  <img src={video} alt="Play video" width="20px" height="20px" />
-                  {videoLoading ? 'Finding Videos...' : 'Find Learning Videos'}
+                  <img src={video} alt="" width="18" height="18" />
+                  {videoLoading ? 'Finding…' : 'Find Learning Videos'}
                 </button>
 
-                {videoError && (
-                  <p className="youtube-error">{videoError}</p>
-                )}
+                {videoError && <p className="youtube-error">{videoError}</p>}
 
                 <div className="youtube-list">
                   {videos.map((v) => (
                     <div className="youtube-card" key={v.videoId}>
-                      <img
-                        src={v.thumbnail}
-                        alt={v.title}
-                        className="youtube-thumbnail"
-                      />
+                      <img src={v.thumbnail} alt={v.title} className="youtube-thumbnail" />
                       <h3>{v.title}</h3>
                       <p className="youtube-channel">{v.channel}</p>
                       <a
@@ -283,148 +377,78 @@ function Schedule() {
                         rel="noopener noreferrer"
                         className="youtube-watch-btn"
                       >
-                        Watch on YouTube
+                        ▶ Watch on YouTube
                       </a>
                     </div>
                   ))}
                 </div>
-
               </section>
 
-              {/* RIGHT: STUDY SESSIONS — grouped by day */}
-              <section className="sessions-section">
+              {/* ── Drag handle 1 ── */}
+              <div
+                className="col-drag-handle"
+                onMouseDown={(e) => onDragStart(e, 0)}
+                title="Drag to resize"
+                role="separator"
+                aria-orientation="vertical"
+              >
+                <span className="drag-handle-bar" />
+              </div>
 
-                <h2>Daily Tasks</h2>
+              {/* ── Column 2: Daily Tasks ── */}
+              <section className="col-panel sessions-section">
+                <h2>📋 Daily Tasks</h2>
 
-                {schedule.tasks &&
-                  groupByDay(schedule.tasks).map(({ day, tasks: dayTasks }) => (
+                {grouped && (
+                  <GroupedTaskList
+                    grouped={grouped}
+                    aiHelp={aiHelp}
+                    aiLoading={aiLoading}
+                    customQuestion={customQuestion}
+                    onCustomChange={handleCustomChange}
+                    onSmartBtn={askSessionAI}
+                    onCustomAsk={askCustomQuestion}
+                    onComplete={completeTask}
+                    onReschedule={rescheduleSingleSession}
+                  />
+                )}
+              </section>
 
-                    // ── NEW: One white card per day ──
-                    // The "day-group-card" class adds the hover/shadow effect
-                    // defined in Schedule.css.
-                    <div className="day-group-card" key={day}>
+              {/* ── Drag handle 2 ── */}
+              <div
+                className="col-drag-handle"
+                onMouseDown={(e) => onDragStart(e, 1)}
+                title="Drag to resize"
+                role="separator"
+                aria-orientation="vertical"
+              >
+                <span className="drag-handle-bar" />
+              </div>
 
-                      {/* Day heading */}
-                      <div className="day-group-header">
-                        <h3>Day {day}</h3>
-                      </div>
+              {/* ── Column 3: PDF Viewer ── */}
+              <section className="col-panel pdf-section">
+                <h2>📄 Your PDF</h2>
 
-                      {/* All sessions within this day */}
-                      {dayTasks.map((task, sessionIdx) => {
-                        // Use a composite key for AI state so each
-                        // task still has its own independent AI output.
-                        const aiKey = `${day}-${sessionIdx}`;
-                        const pages = `${task.pageStart}–${task.pageEnd}`;
-
-                        return (
-                          <div className="session-card" key={task.id}>
-
-                            <div className="session-header">
-                              <span className="session-time-label">
-                                Session {sessionIdx + 1}
-                              </span>
-                              <span>
-                                {task.startTime} – {task.endTime}
-                              </span>
-                            </div>
-
-                            <p>Pages: <strong>{pages}</strong></p>
-
-                            <p>
-                              Status:{' '}
-                              {task.completed
-                                ? 'Completed'
-                                : task.rescheduled
-                                  ? 'Rescheduled'
-                                  : 'Pending'}
-                            </p>
-
-                            {!task.completed && (
-                              <div className="session-actions">
-                                <button onClick={() => completeTask(task.id)}>
-                                  Mark Complete
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    rescheduleSingleSession(task.id)
-                                  }
-                                >
-                                  Reschedule This Session
-                                </button>
-                              </div>
-                            )}
-
-                            <p className="ai-title">
-                              AI Help for pages {pages}:
-                            </p>
-
-                            {/* Preset AI buttons */}
-                            <div className="ai-buttons">
-                              {smartButtons.map((btn) => (
-                                <button
-                                  key={btn.key}
-                                  onClick={() =>
-                                    askSessionAI(task, aiKey, btn.key)
-                                  }
-                                  disabled={aiLoading[aiKey]}
-                                >
-                                  {btn.label}
-                                </button>
-                              ))}
-                            </div>
-
-                            {/* NEW — custom question text box */}
-                            <div className="ai-custom-box">
-                              <textarea
-                                className="ai-custom-input"
-                                placeholder="Ask your own question about these pages…"
-                                value={customQuestion[aiKey] || ''}
-                                onChange={(e) =>
-                                  setCustomQuestion((prev) => ({
-                                    ...prev,
-                                    [aiKey]: e.target.value,
-                                  }))
-                                }
-                                rows={2}
-                                disabled={aiLoading[aiKey]}
-                              />
-                              <button
-                                className="ai-custom-ask-btn"
-                                onClick={() =>
-                                  askCustomQuestion(task, aiKey)
-                                }
-                                disabled={
-                                  aiLoading[aiKey] ||
-                                  !(customQuestion[aiKey] || '').trim()
-                                }
-                              >
-                                Ask AI
-                              </button>
-                            </div>
-
-                            {aiLoading[aiKey] && (
-                              <p className="ai-loading">AI is thinking...</p>
-                            )}
-
-                            {aiHelp[aiKey] && (
-                              <div className="ai-response">
-                                <ReactMarkdown>{aiHelp[aiKey]}</ReactMarkdown>
-                              </div>
-                            )}
-
-                          </div>
-                        );
-                      })}
-
-                    </div>
-                  ))}
-
+                {pdfUrl ? (
+                  <>
+                    <p className="pdf-section-subtitle">Your uploaded study document is shown below.</p>
+                    <iframe className="pdf-iframe" src={pdfUrl} title="Study PDF" />
+                  </>
+                ) : (
+                  <div className="pdf-empty">
+                    <span className="pdf-empty-icon">📭</span>
+                    <p>No PDF was uploaded for this schedule.</p>
+                    <p className="pdf-empty-hint">
+                      When you create a schedule with a PDF, it will appear here
+                      so you can read it alongside your study tasks.
+                    </p>
+                  </div>
+                )}
               </section>
 
             </div>
           </>
         )}
-
       </div>
     </>
   );

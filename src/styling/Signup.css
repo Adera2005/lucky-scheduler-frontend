@@ -1,126 +1,173 @@
+/* ============================================================
+   Signup.css  (updated — dark/light mode via CSS vars)
+   ============================================================ */
+
 body {
   margin: 0;
-  background: #eef2fb;
+  background: var(--bg-page);
   font-family: Arial, sans-serif;
 }
 
 .signup-page {
   width: 100%;
   max-width: 500px;
-  margin: 40px auto;
-  background: white;
+  margin: 60px auto;
+  background: var(--bg-card);
   border-radius: 20px;
   overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  transition: background 0.3s ease;
 }
 
 .signup-blue {
-  background: #5b7fd6;
-  color: white;
-  padding: 60px 30px;
+  background: var(--nav-bg);
+  color: var(--nav-text);
+  padding: 56px 30px;
   text-align: center;
 }
 
 .signup-blue h1 {
   margin-bottom: 10px;
+  font-size: 26px;
 }
 
 .signup-blue p {
   margin: 0;
+  font-size: 14px;
+  opacity: 0.85;
 }
 
 .signup-white {
-  background: white;
-  padding: 40px 30px;
+  background: var(--bg-card);
+  padding: 36px 30px;
+  transition: background 0.3s ease;
 }
 
 .signup-white h2 {
-  margin-bottom: 30px;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+  font-size: 20px;
 }
 
 .signup-error {
   background: #ffe5e5;
   color: #c0392b;
-  padding: 10px;
-  margin-bottom: 20px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
   border-radius: 8px;
+  font-size: 13px;
+}
+
+[data-theme="dark"] .signup-error {
+  background: #3a1010;
+  color: #fc8181;
 }
 
 .signup-field {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .signup-field label {
   display: block;
   margin-bottom: 7px;
   font-weight: 600;
+  color: var(--text-primary);
+  font-size: 13px;
 }
 
 .signup-field input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #dde5f4;
+  padding: 11px 13px;
+  border: 1px solid var(--input-border);
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 14px;
   box-sizing: border-box;
+  background: var(--input-bg);
+  color: var(--input-text);
+  transition: border-color 0.2s ease;
 }
 
-.signup-white button {
+.signup-field input:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(91, 127, 214, 0.1);
+}
+
+.signup-white button[type="submit"],
+.signup-white > button {
   width: 100%;
-  padding: 13px;
-  background: #5b7fd6;
-  color: white;
+  padding: 12px;
+  background: var(--accent);
+  color: #fff;
   border: none;
   border-radius: 8px;
   font-size: 15px;
-  font-weight: bold;
+  font-weight: 700;
   cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: var(--shadow-btn);
 }
 
 .signup-white button:hover {
-  background: #4a6cc4;
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
 }
 
 .login-text {
   text-align: center;
-  margin-top: 25px;
+  margin-top: 22px;
+  color: var(--text-secondary);
+  font-size: 13px;
 }
 
 .login-text a {
-  color: #4a6cc4;
-  font-weight: bold;
+  color: var(--text-accent);
+  font-weight: 700;
   text-decoration: none;
 }
+
+.login-text a:hover {
+  text-decoration: underline;
+}
+
 /* Password input with eye icon */
 .signup-password-box {
-display: flex;
-align-items: center;
-border: 1px solid #dde5f4;
-border-radius: 8px;
-background: white;
-overflow: hidden;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.signup-password-box:focus-within {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(91, 127, 214, 0.1);
 }
 
 .signup-password-box input {
-flex: 1;
-min-width: 0;
-border: none;
-outline: none;
-background: #f5f8ff;
-
-.signup-password-box {
-  background: #f5f8ff;
-}
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--input-text);
+  padding: 11px 13px;
+  font-size: 14px;
 }
 
 .signup-password-box span {
-display: flex;
-align-items: center;
-padding: 0 12px;
-cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  cursor: pointer;
+  color: var(--text-secondary);
 }
 
 .signup-password-box img {
-width: 20px;
-height: 20px;
-
+  width: 20px;
+  height: 20px;
 }

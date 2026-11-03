@@ -1,413 +1,443 @@
+/* ============================================================
+   Schedule.css
+   Plain CSS only — no Tailwind, no utility classes.
+   All colours use CSS custom properties from theme.css.
+   ============================================================ */
+
+/* ── Page wrapper ── */
 .schedule-page {
-  background: #eef2fb;
+  background: var(--bg-page);
   min-height: 100vh;
-  padding: 90px 30px 40px;
+  padding: 90px 20px 40px;
   box-sizing: border-box;
-  color: #24304d;
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Header */
-
+/* ── Header card ── */
 .schedule-header {
-  background: white;
-  max-width: 1200px;
-  margin: 0 auto 25px;
-  padding: 25px;
-  border-radius: 16px;
-  border: 1px solid #dde5f4;
+  background: var(--bg-card);
+  margin: 0 0 18px;
+  padding: 22px 24px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
   box-sizing: border-box;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .schedule-header h1 {
-  margin: 0 0 20px;
-  color: #24304d;
-  font-size: 28px;
+  margin: 0 0 14px;
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
 }
 
+/* Summary chips */
 .schedule-summary {
   display: flex;
-  gap: 25px;
+  gap: 8px;
   flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
-.schedule-summary p {
-  margin: 0;
-  background: #f5f8ff;
-  padding: 10px 15px;
-  border-radius: 8px;
-  color: #4a6cc4;
-  font-weight: bold;
+.summary-chip {
+  background: var(--accent-soft);
+  color: var(--text-accent);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
 }
 
 .pdf-status {
-  margin-top: 18px;
-  color: #4a6cc4;
-  font-size: 14px;
+  color: var(--text-accent);
+  font-size: 13px;
+  margin: 0 0 12px;
 }
 
-
-/* Main two-column layout */
-
-.schedule-layout {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 25px;
-  align-items: start;
+/* ── Overall progress bar ── */
+.progress-wrapper {
+  margin-top: 14px;
 }
 
-
-/* YouTube section */
-
-.youtube-section {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  border: 1px solid #dde5f4;
-  box-sizing: border-box;
-}
-
-.youtube-section h2 {
-  margin: 0 0 8px;
-  color: #24304d;
-}
-
-.youtube-section > p {
-  margin: 0 0 20px;
-  color: #68738c;
-  font-size: 14px;
-}
-
-
-/* Sessions section */
-
-.sessions-section {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  border: 1px solid #dde5f4;
-  box-sizing: border-box;
-}
-
-.sessions-section h2 {
-  margin: 0 0 20px;
-  color: #24304d;
-}
-
-
-/* Individual session */
-
-.session-card {
-  background: #f5f8ff;
-  border: 1px solid #dde5f4;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 18px;
-}
-
-.session-card:last-child {
-  margin-bottom: 0;
-}
-
-.session-header {
+.progress-label-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
-.session-header h3 {
-  margin: 0;
-  color: #24304d;
-}
-
-.session-header span {
-  color: #4a6cc4;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.session-card p {
-  margin: 8px 0;
-}
-
-
-/* Session action buttons */
-
-.session-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin: 15px 0;
-}
-
-.session-actions button {
-  background: #5b7fd6;
-  color: white;
-  border: none;
-  padding: 9px 14px;
-  border-radius: 6px;
-  cursor: pointer;
+.progress-label {
   font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
-.session-actions button:hover {
-  background: #4a6cc4;
-}
-
-
-/* AI */
-
-.ai-title {
-  margin-top: 20px !important;
-  font-weight: bold;
-  color: #24304d;
-}
-
-.ai-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.ai-buttons button {
-  background: white;
-  color: #4a6cc4;
-  border: 1px solid #5b7fd6;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.ai-buttons button:hover {
-  background: #eaf0fc;
-}
-
-.ai-buttons button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.ai-loading {
-  color: #4a6cc4;
+.progress-pct {
   font-size: 14px;
-  margin-top: 12px !important;
+  font-weight: 700;
+  color: var(--progress-text);
 }
 
-.ai-response {
-  background: white;
-  border: 1px solid #dde5f4;
-  border-radius: 8px;
-  padding: 15px;
-  margin-top: 15px;
-  line-height: 1.6;
+.progress-track {
+  width: 100%;
+  height: 10px;
+  background: var(--progress-bg);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-
-/* Mobile */
-
-@media (max-width: 800px) {
-  .schedule-page {
-    padding: 85px 15px 30px;
-  }
-
-  .schedule-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .schedule-header h1 {
-    font-size: 23px;
-  }
-
-  .schedule-summary {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .session-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.progress-fill {
+  height: 100%;
+  background: var(--progress-fill);
+  border-radius: 10px;
+  transition: width 0.5s ease;
 }
+
+.progress-sublabel {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ── Three-column layout with drag handles ── */
+/* gridTemplateColumns is set inline: "X% 8px Y% 8px Z%" */
+.schedule-layout {
+  display: grid;
+  gap: 0;
+  align-items: start;
+  width: 100%;
+}
+
+/* ── Column panel (shared base) ── */
+.col-panel {
+  background: var(--bg-card);
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  box-sizing: border-box;
+  min-width: 0;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.col-panel h2 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.col-subtitle {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ── Drag handle ── */
+.col-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 8px;
+  cursor: col-resize;
+  user-select: none;
+  padding: 0;
+  align-self: stretch;
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+
+.col-drag-handle:hover {
+  opacity: 0.8;
+}
+
+.drag-handle-bar {
+  display: block;
+  width: 3px;
+  height: 40px;
+  background: var(--text-muted);
+  border-radius: 2px;
+}
+
+/* ── YouTube column ── */
 .youtube-search-btn {
-  background: #5b7fd6;
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px;
   border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: var(--shadow-btn);
+  margin-bottom: 14px;
 }
 
 .youtube-search-btn:hover {
-  background: #4a6cc4;
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
 }
 
 .youtube-search-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.7;
   cursor: not-allowed;
+  transform: none;
+}
+
+.youtube-error {
+  color: #c0392b;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+[data-theme="dark"] .youtube-error {
+  color: #fc8181;
 }
 
 .youtube-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
 .youtube-card {
-  background: #f5f8ff;
-  border: 1px solid #dde5f4;
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-color);
   border-radius: 10px;
-  padding: 15px;
+  padding: 13px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.youtube-card:hover {
+  box-shadow: var(--shadow-card);
+  transform: translateY(-2px);
+}
+
+.youtube-thumbnail {
+  width: 100%;
+  border-radius: 7px;
+  margin-bottom: 9px;
+  aspect-ratio: 16/9;
+  object-fit: cover;
 }
 
 .youtube-card h3 {
-  margin: 0 0 12px;
-  font-size: 15px;
-  color: #24304d;
+  margin: 0 0 5px;
+  font-size: 13px;
+  color: var(--text-primary);
   line-height: 1.4;
+}
+
+.youtube-channel {
+  margin: 0 0 9px;
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
 .youtube-watch-btn {
   display: inline-block;
-  background: #5b7fd6;
-  color: white;
+  background: var(--accent);
+  color: #fff;
   text-decoration: none;
-  padding: 8px 12px;
+  padding: 6px 11px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-btn);
 }
 
 .youtube-watch-btn:hover {
-  background: #4a6cc4;
-}
-/* ============================================================
-   Schedule.css — NEW additions (appended in this update)
-   Covers:
-     • .day-group-card   — one card per day, with hover/shadow effect
-     • .day-group-header — day heading row inside the card
-     • .session-time-label — "Session N" label in each session row
-     • .ai-custom-box    — wrapper for the custom AI question area
-     • .ai-custom-input  — the textarea for the user's own question
-     • .ai-custom-ask-btn — "Ask AI" submit button
-   ============================================================ */
-
-/* ── Day group card ── */
-/* Contains ALL sessions for a single day.                        */
-/* The hover effect lifts the card and adds a blue glow shadow.   */
-.day-group-card {
-  background: white;
-  border: 1px solid #dde5f4;
-  border-radius: 16px;
-  padding: 22px;
-  margin-bottom: 24px;
-  box-sizing: border-box;
-
-  /* Smooth transition so the shadow animation feels natural */
-  transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.22s ease;
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-btn-hover);
 }
 
-.day-group-card:hover {
-  /* Lift the card 4px and show a soft blue shadow */
-  transform: translateY(-4px);
-  box-shadow: 0 10px 32px rgba(91, 127, 214, 0.18);
-  border-color: #a8bfee;
-  cursor: default;
+/* ── Sessions column ── */
+/* No max-height, no overflow hidden — shows all content */
+.sessions-section {
+  overflow: visible;
 }
 
-.day-group-card:last-child {
-  margin-bottom: 0;
-}
-
-/* ── Day heading row ── */
-.day-group-header {
+/* ── PDF column ── */
+.pdf-section {
   display: flex;
+  flex-direction: column;
+  min-height: 560px;
+}
+
+.pdf-section-subtitle {
+  margin: 0 0 12px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.pdf-iframe {
+  flex: 1;
+  width: 100%;
+  min-height: 500px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card-inner);
+}
+
+.pdf-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #eef2fb;
+  justify-content: center;
+  text-align: center;
+  padding: 36px 16px;
+  color: var(--text-secondary);
+  gap: 8px;
 }
 
-.day-group-header h3 {
+.pdf-empty-icon {
+  font-size: 44px;
+}
+
+.pdf-empty p {
   margin: 0;
-  font-size: 18px;
-  color: #4a6cc4;
-  font-weight: 700;
-}
-
-/* ── Session label inside a day card ── */
-/* Replaces the old "Day N" h3 since that info now lives in the   */
-/* day-group-header.                                              */
-.session-time-label {
-  font-weight: 700;
-  color: #24304d;
   font-size: 14px;
 }
 
-/* ── Custom AI question area ── */
-.ai-custom-box {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  margin-top: 12px;
-}
-
-/* Textarea for the user's own question */
-.ai-custom-input {
-  flex: 1;
-  min-width: 0;
-  padding: 9px 12px;
-  border: 1px solid #c5d4f5;
-  border-radius: 8px;
-  font-size: 13px;
-  font-family: Arial, sans-serif;
-  color: #24304d;
-  background: #f5f8ff;
-  resize: vertical;
+.pdf-empty-hint {
+  font-size: 12px !important;
+  color: var(--text-muted) !important;
+  max-width: 200px;
   line-height: 1.5;
-  transition: border-color 0.2s ease;
 }
 
-.ai-custom-input:focus {
-  outline: none;
-  border-color: #5b7fd6;
-  box-shadow: 0 0 0 3px rgba(91, 127, 214, 0.12);
+/* ── State messages ── */
+.schedule-state-msg {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-secondary);
 }
 
-.ai-custom-input::placeholder {
-  color: #a0aec0;
-}
-
-.ai-custom-input:disabled {
-  opacity: 0.6;
-}
-
-/* "Ask AI" button next to the custom textarea */
-.ai-custom-ask-btn {
-  background: #5b7fd6;
-  color: white;
-  border: none;
-  padding: 9px 16px;
+.schedule-state-error {
+  color: #c0392b;
+  background: #ffe5e5;
   border-radius: 8px;
-  font-size: 13px;
-  font-weight: bold;
-  cursor: pointer;
+}
+
+[data-theme="dark"] .schedule-state-error {
+  background: #2e1515;
+  color: #fc8181;
+}
+
+/* ── Responsive: stack on mobile ── */
+@media (max-width: 900px) {
+  .schedule-page {
+    padding: 80px 12px 28px;
+  }
+
+  .schedule-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .col-drag-handle {
+    display: none;
+  }
+
+  .col-panel {
+    border-radius: 12px;
+    margin-bottom: 14px;
+  }
+
+  .schedule-header h1 {
+    font-size: 19px;
+  }
+}
+
+/* ── Sessions dropdown chip (in header summary row) ── */
+
+.sessions-chip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* The chip button itself — inherits .summary-chip look */
+.sessions-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  /* inherits padding, border-radius, font, colour from .summary-chip */
+  border: 1px solid var(--border-color);
+  background: var(--accent-soft);
+  font-family: Arial, sans-serif;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.sessions-chip-btn--open {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+/* "+N more ▼" indicator inside the chip */
+.sessions-chip-more {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-accent);
+  margin-left: 2px;
   white-space: nowrap;
-  align-self: flex-end;
-  transition: background 0.2s ease;
 }
 
-.ai-custom-ask-btn:hover {
-  background: #4a6cc4;
+/* Dropdown panel */
+.sessions-chip-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 230px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  z-index: 200;
+  padding: 10px 0 6px;
+  animation: chipDropIn 0.18s ease;
 }
 
-.ai-custom-ask-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+@keyframes chipDropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.sessions-chip-dropdown-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 0 14px 8px;
+  margin: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sessions-chip-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: background 0.15s ease;
+}
+
+.sessions-chip-dropdown-item:hover {
+  background: var(--accent-soft);
+}
+
+.sessions-chip-dropdown-num {
+  font-weight: 600;
+  color: var(--text-accent);
+  white-space: nowrap;
 }

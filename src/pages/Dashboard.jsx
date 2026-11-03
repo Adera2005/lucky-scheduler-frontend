@@ -4,6 +4,7 @@ import Navigationbar from '../components/Navigationbar.jsx';
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api.js';
+import { formatTimeRange } from '../utils/timeFormat.js';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -123,7 +124,7 @@ function Dashboard() {
                   <p>Number of sessions: {schedule.sessions.length}</p>
                   {schedule.sessions.map((session) => (
                     <p key={session.id}>
-                      {session.startTime} - {session.endTime}
+                      {formatTimeRange(session.startTime, session.endTime)}
                     </p>
                   ))}
                 </div>

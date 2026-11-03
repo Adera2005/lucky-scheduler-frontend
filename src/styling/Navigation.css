@@ -1,19 +1,19 @@
 /* ============================================================
    Navigation.css
-   Styles the fixed top navigation bar.
+   Plain CSS — no Tailwind, no utility classes.
 
-   Layout strategy:
-     The nav uses position:relative as the positioning context.
-     The hamburger sits on the left, the logout button on the right.
-     The logo + title block is absolutely centred using
-     left:50% / transform:translateX(-50%) so it stays perfectly
-     in the middle of the bar on every screen size.
+   All icon buttons (hamburger, bell, theme toggle) are
+   borderless and backgroundless — just clean icons with a
+   subtle hover highlight, no box or circle around them.
+
+   Light mode: blue bar, white icons, white logout button.
+   Dark mode:  dark navy bar, gold icons, gold logout button.
    ============================================================ */
 
 .navigationbar {
-  background: #5b7fd6;           /* solid brand blue (richer than the old muted blue) */
-  padding: 0 20px;
-  height: 64px;                  /* fixed height so all children align nicely */
+  background: var(--nav-bg);
+  padding: 0 24px;
+  height: 64px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -22,16 +22,40 @@
   width: 100%;
   z-index: 1000;
   box-sizing: border-box;
-  box-shadow: 0 2px 12px rgba(74, 108, 196, 0.25);  /* subtle depth shadow */
+  box-shadow: var(--shadow-nav);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  border-bottom: 2px solid transparent;
 }
 
-/* ── Hamburger button (left) ── */
+/* Gold bottom accent line in dark mode */
+[data-theme="dark"] .navigationbar {
+  border-bottom: 2px solid #c9a227;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.55);
+}
+
+/* ── Hamburger / menu button ── */
+/* No border, no background box — plain icon only */
 .menu-button {
   cursor: pointer;
   width: 36px;
   height: 36px;
   position: relative;
   flex-shrink: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.menu-button:hover {
+  opacity: 0.75;
+  transform: translateY(-1px);
+}
+
+.menu-button:active {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .hamburger,
@@ -40,21 +64,18 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
-  font-size: 28px;
+  color: var(--nav-icon-color);
+  font-size: 22px;
   line-height: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 
-.hamburger        { opacity: 1; }
-.hamburger.hidden { opacity: 0; }
-
+.hamburger          { opacity: 1; }
+.hamburger.hidden   { opacity: 0; }
 .close-icon         { opacity: 0; }
 .close-icon.visible { opacity: 1; }
 
-/* ── Centre block: logo + app name ── */
-/* Absolute positioning keeps it perfectly centred regardless of   */
-/* how wide the hamburger or logout button are.                    */
+/* ── Centre: logo + app name ── */
 .navigation-centre {
   position: absolute;
   left: 50%;
@@ -62,21 +83,21 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  pointer-events: none;   /* clicks pass through to elements behind */
+  pointer-events: none;
 }
 
-/* Logo image */
 .navigation-logo {
   display: block;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
   flex-shrink: 0;
+  /* In dark mode the SVG is typically dark — invert it to show on dark nav */
+  filter: var(--nav-logo-filter);
 }
 
-/* "Lucky Scheduler" text */
 .navigation-app-name {
-  color: white;
+  color: var(--nav-text);
   font-size: 26px;
   font-family: cursive;
   font-weight: 700;
@@ -84,43 +105,76 @@
   letter-spacing: 0.5px;
 }
 
-/* ── Logout button (right) ── */
-.logout-button {
-  background: white;
-  color: #4a6cc4;
+/* ── Right group: bell + theme toggle + logout ── */
+.nav-right-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Theme toggle button ── */
+/* No border, no background — just the emoji icon */
+.theme-toggle-btn {
+  background: transparent;
   border: none;
-  padding: 9px 20px;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  border-radius: 6px;
-  font-weight: bold;
+  font-size: 19px;
+  line-height: 1;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  opacity: 0.75;
+  transform: translateY(-1px);
+}
+
+.theme-toggle-btn:active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── Logout button ── */
+/* Keeps the pill shape — it's a text button, not an icon */
+.logout-button {
+  background: var(--nav-btn-bg);
+  color: var(--nav-btn-text);
+  border: none;
+  padding: 8px 18px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 700;
   font-size: 14px;
   flex-shrink: 0;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: var(--shadow-btn);
 }
 
 .logout-button:hover {
-  background: #eaf0fc;
+  background: var(--nav-btn-hover);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
+}
+
+.logout-button:active {
+  transform: translateY(0);
 }
 
 /* ── Legacy classes kept for backward compatibility ── */
-/* (used by older JSX that hasn't been touched)        */
-.navigation-left {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
+.navigation-left  { display: flex; align-items: center; gap: 15px; }
+.navigation-title { display: flex; align-items: center; gap: 10px; color: white; margin: 0; font-size: 20px; line-height: 1; }
+.font             { font-size: 35px; font-family: cursive; }
 
-.navigation-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: white;
-  margin: 0;
-  font-size: 20px;
-  line-height: 1;
-}
-
-.font {
-  font-size: 35px;
-  font-family: cursive;
+/* ── Responsive ── */
+@media (max-width: 520px) {
+  .navigationbar        { padding: 0 14px; }
+  .navigation-app-name  { font-size: 19px; }
+  .logout-button        { padding: 7px 12px; font-size: 13px; }
+  .nav-right-group      { gap: 10px; }
 }

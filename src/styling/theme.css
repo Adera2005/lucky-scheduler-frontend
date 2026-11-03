@@ -1,0 +1,155 @@
+/* ============================================================
+   theme.css
+   CSS custom-property tokens for LIGHT and DARK mode.
+   All other stylesheets use var(--token-name) — NO Tailwind,
+   NO utility classes, plain CSS custom properties only.
+
+   Light mode  →  [data-theme="light"]  (default, keeps original blue palette)
+   Dark mode   →  [data-theme="dark"]   (soft deep navy + gold — not harsh)
+   ============================================================ */
+
+/* ── Light mode (default — original blue palette) ── */
+:root,
+[data-theme="light"] {
+  --bg-page:        #eef2fb;
+  --bg-card:        #ffffff;
+  --bg-card-inner:  #f5f8ff;
+  --border-color:   #dde5f4;
+  --border-hover:   #a8bfee;
+
+  --text-primary:   #24304d;
+  --text-secondary: #6b7590;
+  --text-muted:     #a0aec0;
+  --text-accent:    #4a6cc4;
+
+  --accent:         #5b7fd6;
+  --accent-hover:   #4a6cc4;
+  --accent-light:   #eaf0fc;
+  --accent-soft:    #e7eefc;
+
+  /* Navbar — stays the original blue */
+  --nav-bg:         #5b7fd6;
+  --nav-text:       #ffffff;
+
+  /* Nav action buttons are WHITE in light mode */
+  --nav-btn-bg:     #ffffff;
+  --nav-btn-text:   #4a6cc4;
+  --nav-btn-hover:  #eaf0fc;
+
+  /* Hamburger / icon colour on nav (no box — just the icon itself) */
+  --nav-icon-btn-bg:     transparent;
+  --nav-icon-btn-border: transparent;
+  --nav-icon-btn-hover:  transparent;
+  --nav-icon-color:      #ffffff;
+
+  /* Logo SVG filter — keep as-is in light mode (SVG is dark, nav is blue so invert) */
+  --nav-logo-filter:     brightness(0) invert(1);
+  /* Bell emoji needs no CSS filter — emoji renders in its own colour */
+  --nav-bell-filter:     none;
+
+  --sidebar-bg:     #f8faff;
+  --sidebar-text:   #24304d;
+  --sidebar-active: #e7eefc;
+  --sidebar-hover:  #eef3fc;
+  --sidebar-bar:    #5b7fd6;
+  --sidebar-footer-border: #e5eaf3;
+  --sidebar-icon-filter: brightness(0) saturate(100%) invert(18%) sepia(16%) saturate(1466%) hue-rotate(189deg) brightness(92%) contrast(91%);
+
+  --progress-bg:    #e0e8f8;
+  --progress-fill:  #5b7fd6;
+  --progress-text:  #4a6cc4;
+
+  --notif-bg:       #ffffff;
+  --notif-border:   #dde5f4;
+  --notif-item-hover: #f5f8ff;
+  --notif-unread:   #5b7fd6;
+  --notif-badge:    #e53e3e;
+  --notif-badge-text: #ffffff;
+
+  --scrollbar-thumb: #c5d4f5;
+  --scrollbar-track: #f0f4ff;
+
+  --input-bg:       #f5f8ff;
+  --input-border:   #dde5f4;
+  --input-focus:    #5b7fd6;
+  --input-text:     #24304d;
+
+  --shadow-card:      0 4px 20px rgba(91, 127, 214, 0.14);
+  --shadow-nav:       0 2px 10px rgba(74, 108, 196, 0.22);
+  --shadow-btn:       0 2px 8px  rgba(91, 127, 214, 0.28);
+  --shadow-btn-hover: 0 4px 14px rgba(74, 108, 196, 0.38);
+}
+
+/* ── Dark mode — soft deep navy, NOT harsh black ── */
+/* Background is a warm dark navy similar to Kiro's dark theme.  */
+/* Gold accents replace blue; text is off-white, not pure white. */
+[data-theme="dark"] {
+  --bg-page:        #1a1f2e;
+  --bg-card:        #242938;
+  --bg-card-inner:  #2d3347;
+  --border-color:   #363d52;
+  --border-hover:   #c9a227;
+
+  --text-primary:   #e8e2d0;
+  --text-secondary: #9ea8c0;
+  --text-muted:     #626d85;
+  --text-accent:    #d4aa40;
+
+  --accent:         #c9a227;
+  --accent-hover:   #b8911a;
+  --accent-light:   #2e2810;
+  --accent-soft:    #262210;
+
+  /* Navbar — dark navy with gold bottom accent line */
+  --nav-bg:         #141827;
+  --nav-text:       #c9a227;
+  --nav-shadow:     0 2px 0 #c9a227, 0 3px 12px rgba(0,0,0,0.55);
+
+  /* Nav action buttons are GOLD in dark mode */
+  --nav-btn-bg:     #c9a227;
+  --nav-btn-text:   #141827;
+  --nav-btn-hover:  #d4b840;
+
+  /* Hamburger / icon colour on nav (no box — just the icon itself) */
+  --nav-icon-btn-bg:     transparent;
+  --nav-icon-btn-border: transparent;
+  --nav-icon-btn-hover:  transparent;
+  --nav-icon-color:      #c9a227;
+
+  /* Logo SVG filter — invert + gold tint in dark mode */
+  --nav-logo-filter:     brightness(0) saturate(100%) invert(72%) sepia(55%) saturate(500%) hue-rotate(5deg) brightness(95%) contrast(90%);
+  /* Bell emoji needs no CSS filter */
+  --nav-bell-filter:     none;
+
+  --sidebar-bg:     #1e2335;
+  --sidebar-text:   #e8e2d0;
+  --sidebar-active: #2e2810;
+  --sidebar-hover:  #262a3b;
+  --sidebar-bar:    #c9a227;
+  --sidebar-footer-border: #363d52;
+  --sidebar-icon-filter: brightness(0) saturate(100%) invert(72%) sepia(40%) saturate(600%) hue-rotate(8deg) brightness(92%) contrast(88%);
+
+  --progress-bg:    #2e2810;
+  --progress-fill:  #c9a227;
+  --progress-text:  #d4aa40;
+
+  --notif-bg:       #242938;
+  --notif-border:   #363d52;
+  --notif-item-hover: #2d3347;
+  --notif-unread:   #c9a227;
+  --notif-badge:    #c9a227;
+  --notif-badge-text: #141827;
+
+  --scrollbar-thumb: #4a5168;
+  --scrollbar-track: #1e2335;
+
+  --input-bg:       #2d3347;
+  --input-border:   #363d52;
+  --input-focus:    #c9a227;
+  --input-text:     #e8e2d0;
+
+  --shadow-card:      0 4px 20px rgba(0, 0, 0, 0.45);
+  --shadow-nav:       0 2px 10px rgba(0, 0, 0, 0.60);
+  --shadow-btn:       0 2px 8px  rgba(201, 162, 39, 0.25);
+  --shadow-btn-hover: 0 4px 14px rgba(201, 162, 39, 0.40);
+}

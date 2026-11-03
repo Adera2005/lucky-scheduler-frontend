@@ -1,0 +1,550 @@
+/* ============================================================
+   GroupedTaskList.css
+   Plain CSS — no Tailwind, no utility classes.
+   Styles the collapsible week / month / day task list used on
+   the Schedule page.  All colours via CSS custom properties
+   from theme.css so dark / light mode works automatically.
+   ============================================================ */
+
+/* ── Root wrapper ── */
+.gtl-root {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   MONTH ACCORDION
+   ──────────────────────────────────────────────────────────── */
+
+.gtl-month-accordion {
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg-card);
+  transition: border-color 0.2s ease, background 0.3s ease;
+}
+
+.gtl-month-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: var(--bg-card-inner);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-family: Arial, sans-serif;
+  transition: background 0.2s ease;
+  flex-wrap: wrap;
+}
+
+.gtl-month-header:hover {
+  background: var(--accent-soft);
+}
+
+.gtl-month-header--open {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gtl-month-chevron {
+  color: var(--text-accent);
+  font-size: 12px;
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.gtl-month-label {
+  font-weight: 700;
+  color: var(--text-accent);
+  font-size: 15px;
+  flex: 1;
+  min-width: 80px;
+}
+
+.gtl-month-weeks {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.gtl-month-progress-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--progress-text);
+  min-width: 52px;
+  text-align: right;
+}
+
+.gtl-month-progress-pill {
+  width: 70px;
+  height: 6px;
+  background: var(--progress-bg);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.gtl-month-progress-fill {
+  height: 100%;
+  background: var(--progress-fill);
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+.gtl-month-body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   WEEK ACCORDION
+   ──────────────────────────────────────────────────────────── */
+
+.gtl-week-accordion {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-card);
+  transition: border-color 0.2s ease, background 0.3s ease;
+}
+
+.gtl-week-accordion:hover {
+  border-color: var(--border-hover);
+}
+
+.gtl-week-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--bg-card-inner);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+  color: var(--text-primary);
+  font-family: Arial, sans-serif;
+  transition: background 0.2s ease;
+  flex-wrap: wrap;
+}
+
+.gtl-week-header:hover {
+  background: var(--accent-light);
+}
+
+.gtl-week-header--open {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gtl-week-chevron {
+  color: var(--text-accent);
+  font-size: 11px;
+  width: 12px;
+  flex-shrink: 0;
+}
+
+.gtl-week-label {
+  font-weight: 700;
+  color: var(--text-accent);
+  font-size: 14px;
+  min-width: 60px;
+}
+
+.gtl-week-days-range {
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.gtl-week-progress-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--progress-text);
+  min-width: 52px;
+  text-align: right;
+}
+
+.gtl-week-progress-pill {
+  width: 60px;
+  height: 5px;
+  background: var(--progress-bg);
+  border-radius: 5px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.gtl-week-progress-fill {
+  height: 100%;
+  background: var(--progress-fill);
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+
+.gtl-week-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   DAY CARD
+   ──────────────────────────────────────────────────────────── */
+
+.gtl-day-card {
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.gtl-day-card:hover {
+  box-shadow: var(--shadow-card);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.gtl-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.gtl-day-header h4 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-accent);
+  font-weight: 700;
+}
+
+.gtl-day-progress-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Mini progress bar (per day) */
+.gtl-mini-track {
+  height: 4px;
+  background: var(--progress-bg);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.gtl-mini-fill {
+  height: 100%;
+  background: var(--progress-fill);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* ────────────────────────────────────────────────────────────
+   SESSION CARD
+   ──────────────────────────────────────────────────────────── */
+
+.gtl-session-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s ease;
+}
+
+.gtl-session-card:last-child {
+  margin-bottom: 0;
+}
+
+.gtl-session-card--done {
+  opacity: 0.75;
+  border-left: 3px solid var(--accent);
+}
+
+.gtl-session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gtl-session-label {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.gtl-session-time {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-accent);
+}
+
+.gtl-session-pages {
+  margin: 4px 0 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.gtl-session-pages strong {
+  color: var(--text-primary);
+}
+
+.gtl-session-status {
+  margin-bottom: 10px;
+}
+
+/* Status badges */
+.gtl-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.gtl-badge--done {
+  background: #d4edda;
+  color: #276749;
+}
+
+.gtl-badge--rescheduled {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.gtl-badge--pending {
+  background: var(--accent-soft);
+  color: var(--text-accent);
+}
+
+[data-theme="dark"] .gtl-badge--done {
+  background: #1a3a25;
+  color: #68d391;
+}
+
+[data-theme="dark"] .gtl-badge--rescheduled {
+  background: #2a2000;
+  color: #f6e05e;
+}
+
+/* Action buttons */
+.gtl-session-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.gtl-btn-complete,
+.gtl-btn-reschedule {
+  padding: 7px 13px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: Arial, sans-serif;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: var(--shadow-btn);
+}
+
+.gtl-btn-complete {
+  background: var(--accent);
+  color: #fff;
+}
+
+.gtl-btn-complete:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
+}
+
+.gtl-btn-reschedule {
+  background: var(--bg-card-inner);
+  color: var(--text-accent);
+  border: 1px solid var(--border-color);
+}
+
+.gtl-btn-reschedule:hover {
+  background: var(--accent-light);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
+}
+
+/* AI section */
+.gtl-ai-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 12px 0 6px;
+}
+
+.gtl-ai-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.gtl-ai-buttons button {
+  background: var(--bg-card-inner);
+  color: var(--text-accent);
+  border: 1px solid var(--border-color);
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: Arial, sans-serif;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.gtl-ai-buttons button:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.gtl-ai-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Custom question textarea */
+.gtl-custom-box {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 8px;
+}
+
+.gtl-custom-input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--input-border);
+  border-radius: 7px;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  color: var(--input-text);
+  background: var(--input-bg);
+  resize: vertical;
+  line-height: 1.5;
+  transition: border-color 0.2s ease;
+}
+
+.gtl-custom-input:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 2px rgba(91, 127, 214, 0.10);
+}
+
+.gtl-custom-input::placeholder {
+  color: var(--text-muted);
+}
+
+.gtl-custom-input:disabled {
+  opacity: 0.6;
+}
+
+.gtl-custom-ask-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 7px 12px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  align-self: flex-end;
+  font-family: Arial, sans-serif;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: var(--shadow-btn);
+}
+
+.gtl-custom-ask-btn:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
+}
+
+.gtl-custom-ask-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* AI loading dots */
+.gtl-ai-loading {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding: 7px 10px;
+  background: var(--accent-soft);
+  border-radius: 7px;
+}
+
+.gtl-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: gtlDotBounce 1.2s infinite ease-in-out;
+}
+
+.gtl-dot:nth-child(2) { animation-delay: 0.2s; }
+.gtl-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes gtlDotBounce {
+  0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+  40%           { transform: scale(1);   opacity: 1;   }
+}
+
+.gtl-loading-text {
+  font-size: 12px;
+  color: var(--text-accent);
+  margin-left: 5px;
+}
+
+/* AI response */
+.gtl-ai-response {
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent);
+  border-radius: 7px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.gtl-ai-response p           { margin: 0 0 8px; }
+.gtl-ai-response p:last-child { margin-bottom: 0; }
+.gtl-ai-response h1,
+.gtl-ai-response h2,
+.gtl-ai-response h3,
+.gtl-ai-response h4          { color: var(--text-primary); margin: 10px 0 5px; font-size: 13px; }
+.gtl-ai-response strong      { color: var(--text-accent); }
+.gtl-ai-response ul,
+.gtl-ai-response ol          { padding-left: 18px; margin: 4px 0 8px; }
+.gtl-ai-response li          { margin-bottom: 3px; }
+.gtl-ai-response code        { background: var(--bg-page); color: var(--text-accent); padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+.gtl-ai-response pre         { background: var(--bg-page); padding: 8px 10px; border-radius: 6px; overflow-x: auto; margin: 6px 0; font-size: 12px; }
+.gtl-ai-response blockquote  { border-left: 3px solid var(--accent); padding-left: 10px; color: var(--text-secondary); margin: 6px 0; }

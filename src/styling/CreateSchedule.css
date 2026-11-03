@@ -1,26 +1,32 @@
+/* ============================================================
+   CreateSchedule.css  (updated — dark/light mode via CSS vars)
+   ============================================================ */
+
 .create-schedule-page {
-  background: #eef2fb;
+  background: var(--bg-page);
   min-height: 100vh;
   padding: 90px 30px 40px;
   box-sizing: border-box;
-  color: #24304d;
+  color: var(--text-primary);
+  transition: background 0.3s ease;
 }
 
 .create-schedule-container {
   max-width: 500px;
   margin: 0 auto;
-  background: white;
-  padding: 20px;
+  background: var(--bg-card);
+  padding: 28px 24px;
   border-radius: 16px;
-  border: 1px solid #dde5f4;
+  border: 1px solid var(--border-color);
   box-sizing: border-box;
   text-align: center;
+  transition: background 0.3s ease;
 }
 
 .create-schedule-container h1 {
-  margin: 0 0 25px;
-  color: #24304d;
-  font-size: 28px;
+  margin: 0 0 24px;
+  color: var(--text-primary);
+  font-size: 26px;
 }
 
 .schedule-error {
@@ -30,6 +36,13 @@
   padding: 12px;
   border-radius: 8px;
   margin-bottom: 20px;
+  font-size: 13px;
+}
+
+[data-theme="dark"] .schedule-error {
+  background: #3a1010;
+  color: #fc8181;
+  border-color: #5a2020;
 }
 
 .schedule-form-group {
@@ -38,50 +51,53 @@
 
 .schedule-form-group label {
   display: block;
-  color: #24304d;
-  font-weight: bold;
+  color: var(--text-primary);
+  font-weight: 700;
   margin-bottom: 7px;
-  font-size: 14px;
+  font-size: 13px;
+  text-align: left;
 }
 
 .schedule-form-group input[type="text"],
 .schedule-form-group input[type="number"],
 .schedule-form-group input[type="time"] {
-  background: #f5f8ff;
-  border: 1px solid #dde5f4;
-  color: #24304d;
-  padding: 10px;
-  border-radius: 6px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--input-text);
+  padding: 10px 13px;
+  border-radius: 8px;
   box-sizing: border-box;
   font-size: 14px;
+  transition: border-color 0.2s ease;
 }
 
 .schedule-form-group input[type="text"],
 .schedule-form-group input[type="number"] {
-  
-  width: 300px;
+  width: 100%;
   display: block;
   margin: 0 auto;
 }
 
 .schedule-form-group input:focus {
   outline: none;
-  border-color: #5b7fd6;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(91, 127, 214, 0.1);
 }
 
 .pdf-input {
-  background: #f5f8ff;
-  border: 1px solid #dde5f4;
-  padding: 10px;
-  border-radius: 6px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  padding: 10px 13px;
+  border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
+  color: var(--input-text);
 }
 
 .pdf-selected {
-  color: #4a6cc4;
+  color: var(--text-accent);
   margin-top: 8px;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .session-row {
@@ -90,21 +106,47 @@
   gap: 10px;
   margin-top: 10px;
   flex-wrap: wrap;
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
 }
 
 .session-label {
-  color: #24304d;
-  font-size: 14px;
-  min-width: 75px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 70px;
 }
 
 .session-to {
-  color: #68738c;
-  font-size: 14px;
+  color: var(--text-secondary);
+  font-size: 13px;
 }
 
 .session-row input[type="time"] {
-  width: 120px;
+  width: 130px;
+  height: 40px;
+  padding: 8px 12px;
+  background: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.session-row input[type="time"]:hover {
+  border-color: var(--accent);
+}
+
+.session-row input[type="time"]:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(91, 127, 214, 0.1);
 }
 
 .remove-session-btn {
@@ -114,126 +156,82 @@
   padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-btn);
 }
 
 .remove-session-btn:hover {
   background: #c9302c;
+  box-shadow: var(--shadow-btn-hover);
 }
 
 .add-session-btn {
-  background: #eaf0fc;
-  color: #4a6cc4;
-  border: 1px solid #5b7fd6;
+  background: var(--accent-light);
+  color: var(--text-accent);
+  border: 1px solid var(--accent);
   padding: 9px 15px;
-  border-radius: 6px;
+  border-radius: 7px;
   cursor: pointer;
   margin-top: 12px;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: var(--shadow-btn);
 }
 
 .add-session-btn:hover {
-  background: #dce7fb;
+  background: var(--accent-soft);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
 }
 
 .create-schedule-btn {
-  background: #5b7fd6;
+  background: var(--accent);
   color: white;
   border: none;
   padding: 11px 24px;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
-  font-size: 15px;
-  font-weight: bold;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: var(--shadow-btn);
 }
 
 .create-schedule-btn:hover {
-  background: #4a6cc4;
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
 }
 
 .create-schedule-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
-@media (max-width: 700px) {
-  .create-schedule-page {
-    padding: 85px 15px 30px;
-  }
-
-  .create-schedule-container {
-    padding: 20px;
-  }
-
-  .create-schedule-container h1 {
-    font-size: 24px;
-  }
-
- .session-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #f5f8ff;
-  border: 1px solid #dde5f4;
-  border-radius: 10px;
-  padding: 12px;
-  margin-top: 10px;
-}
-
- .session-row input[type="time"] {
-  width: 140px;
-  height: 42px;
-  padding: 8px 12px;
-  background: #f5f8ff;
-  color: #24304d;
-  border: 1px solid #cbd7ee;
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: Arial, sans-serif;
-  box-sizing: border-box;
-  cursor: pointer;
-  transition: 0.2s ease;
-  
-}
-
-.session-row input[type="time"]:hover {
-  border-color: #5b7fd6;
-  
-
-}
-
-.session-row input[type="time"]:focus {
-  outline: none;
-  border-color: #5b7fd6;
-  box-shadow: 0 0 0 3px #eaf0fc;
-}
-
-  .session-label {
-  color: #24304d;
-  font-weight: bold;
-  font-size: 14px;
-}
-}
+/* PDF Upload block */
 .pdf-upload {
   display: block;
-  width:300px;
-  margin: 0 auto;
-  background: #f5f8ff;
-  border: 1px solid #dde5f4;
-  border-radius: 8px;
-  padding: 40px 40px;
+  width: 100%;
+  background: var(--bg-card-inner);
+  border: 2px dashed var(--border-color);
+  border-radius: 10px;
+  padding: 32px 20px;
   cursor: pointer;
-  color: #4a6cc4;
-  font-size: 14px;
-  font-weight: bold;
+  color: var(--text-accent);
+  font-size: 13px;
+  font-weight: 600;
   text-align: center;
-  transition: 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .pdf-upload:hover {
-  background: #eaf0fc;
-  border-color: #5b7fd6;
+  background: var(--accent-light);
+  border-color: var(--accent);
 }
 
 .pdf-upload input {
@@ -242,6 +240,7 @@
 
 .pdf-upload-icon {
   font-size: 28px;
+  margin-bottom: 8px;
 }
 
 .pdf-upload-text {
@@ -251,25 +250,26 @@
 }
 
 .pdf-upload-text strong {
-  color: #24304d;
-  font-size: 14px;
+  color: var(--text-primary);
+  font-size: 13px;
 }
 
 .pdf-upload-text small {
-  color: #68738c;
+  color: var(--text-secondary);
   font-size: 12px;
 }
 
+/* Misc */
 .edit-schedule-note {
   font-size: 13px;
-  color: #6b7590;
+  color: var(--text-secondary);
   text-align: left;
   margin: -10px 0 20px;
   line-height: 1.5;
 }
 
 .schedule-loading {
-  color: #6b7590;
+  color: var(--text-secondary);
 }
 
 .current-pdf-row {
@@ -282,8 +282,13 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: #4a6cc4;
+  color: var(--text-accent);
   margin-top: 8px;
   cursor: pointer;
 }
 
+@media (max-width: 600px) {
+  .create-schedule-page {
+    padding: 80px 14px 30px;
+  }
+}

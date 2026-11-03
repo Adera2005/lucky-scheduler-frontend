@@ -1,119 +1,171 @@
+/* ============================================================
+   Login.css  (updated — dark/light mode via CSS vars)
+   ============================================================ */
+
 body {
   margin: 0;
-  background: #eef2fb;
+  background: var(--bg-page);
 }
+
 .login-page {
   width: 100%;
   max-width: 500px;
-  margin: 40px auto;
-  background: white;
+  margin: 60px auto;
+  background: var(--bg-card);
   border-radius: 20px;
   overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  transition: background 0.3s ease;
 }
 
-/* Blue top section */
+/* Blue / gold top section */
 .login-blue {
-  background: #5b7fd6;
-  color: white;
-  padding: 84px 20px;
+  background: var(--nav-bg);
+  color: var(--nav-text);
+  padding: 60px 20px;
   text-align: center;
 }
 
 .login-blue h1 {
   margin-bottom: 10px;
+  font-size: 26px;
 }
 
 .login-blue p {
   margin: 0;
+  font-size: 14px;
+  opacity: 0.85;
 }
 
-/* White bottom section */
+/* Bottom white / dark section */
 .login-white {
-  background: white;
-  padding: 40px 30px;
-  max-width: 500px;
-  width: 100%;
-  margin: 0 auto;
+  background: var(--bg-card);
+  padding: 36px 30px;
+  transition: background 0.3s ease;
 }
 
 .login-white h2 {
-  margin-bottom: 30px;
+  margin-bottom: 26px;
+  color: var(--text-primary);
+  font-size: 20px;
 }
 
 /* Error message */
 .login-error {
   background: #ffe5e5;
   color: #c0392b;
-  padding: 10px;
-  margin-bottom: 20px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
   border-radius: 8px;
+  font-size: 13px;
+}
+
+[data-theme="dark"] .login-error {
+  background: #3a1010;
+  color: #fc8181;
 }
 
 /* Input areas */
 .login-field {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .login-field label {
   display: block;
   margin-bottom: 7px;
   font-weight: 600;
+  color: var(--text-primary);
+  font-size: 13px;
 }
 
 .login-field input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #dde5f4;
+  padding: 11px 13px;
+  border: 1px solid var(--input-border);
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 14px;
   box-sizing: border-box;
+  background: var(--input-bg);
+  color: var(--input-text);
+  transition: border-color 0.2s ease;
 }
 
-/* Password */
+.login-field input:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(91, 127, 214, 0.1);
+}
+
+/* Password box */
 .password-box {
   display: flex;
   align-items: center;
-  border: 1px solid #dde5f4;
+  border: 1px solid var(--input-border);
   border-radius: 8px;
-  background: white;
+  background: var(--input-bg);
+  transition: border-color 0.2s ease;
+}
+
+.password-box:focus-within {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(91, 127, 214, 0.1);
 }
 
 .password-box input {
   border: none;
   outline: none;
+  background: transparent;
+  color: var(--input-text);
+  box-shadow: none;
+}
+
+.password-box input:focus {
+  box-shadow: none;
 }
 
 .password-box span {
   padding: 0 12px;
   cursor: pointer;
+  color: var(--text-secondary);
 }
 
 /* Login button */
-.login-white button {
+.login-white button[type="submit"],
+.login-white button:not(.password-box span) {
   width: 100%;
-  padding: 13px;
-  background: #5b7fd6;
-  color: white;
+  padding: 12px;
+  background: var(--accent);
+  color: #fff;
   border: none;
   border-radius: 8px;
   font-size: 15px;
-  font-weight: bold;
+  font-weight: 700;
   cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: var(--shadow-btn);
 }
 
 .login-white button:hover {
-  background: #4a6cc4;
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
 }
 
-/* Sign up */
+/* Sign up link */
 .signup-text {
   text-align: center;
-  margin-top: 25px;
+  margin-top: 22px;
+  color: var(--text-secondary);
+  font-size: 13px;
 }
 
 .signup-text a {
-  color: #4a6cc4;
-  font-weight: bold;
+  color: var(--text-accent);
+  font-weight: 700;
   text-decoration: none;
 }
 
+.signup-text a:hover {
+  text-decoration: underline;
+}
