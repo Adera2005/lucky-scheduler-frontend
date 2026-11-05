@@ -1,51 +1,33 @@
 // ============================================================
 // NotificationBell.jsx
-// Per-user notification bell component.
-// Reads notifications from localStorage keyed by userId so
-// every student has their own independent notification list.
+// Per-user notification bell — reads from the database API,
+// NOT from localStorage, so notifications are fully isolated
+// per student even on shared devices.
 //
-// Notifications are created here and also consumed/cleared here.
-// External code can push a notification via the exported helper:
+// Exported helper:
 //   pushNotification(userId, { title, body, type })
+//   → POSTs to /api/notifications and fires the custom event
+//     'notifications-updated' so all mounted bells refresh.
 // ============================================================
 
 import { useState, useEffect, useRef } from 'react';
 import '../styling/NotificationBell.css';
+import api from '../services/api.js';
 
-// ── Helpers ──────────────────────────────────────────────────
+// ── Public helper — used by useStudyNotifications hook ────
 
-/**
- * Returns the localStorage key for a given user's notifications.
- */
-export function notifKey(userId) {
-  return `notifs_${userId}`;
+export async function pushNotification(_userId, { title, body, type = 'info' }) {
+  // _userId is unused now — the API authenticates via JWT
+  try {
+    await api.post('/api/notifications', { title, body, type });
+    window.dispatchEvent(new Event('notifications-updated'));
+  } catch (err) {
+    // Non-fatal — if the API is down, silently skip
+    console.warn('pushNotification failed:', err.message);
+  }
 }
 
-/**
- * Push a notification into the user's notification list.
- * Can be called from any module (e.g. useStudyNotifications).
- *
- * @param {string|number} userId
- * @param {{ title: string, body: string, type?: string }} notification
- */
-export function pushNotification(userId, { title, body, type = 'info' }) {
-  if (!userId) return;
-  const key = notifKey(userId);
-  const existing = JSON.parse(localStorage.getItem(key) || '[]');
-  const newNotif = {
-    id:        Date.now() + Math.random(),
-    title,
-    body,
-    type,       // 'info' | 'reminder' | 'success' | 'warning'
-    read:       false,
-    createdAt:  new Date().toISOString(),
-  };
-  localStorage.setItem(key, JSON.stringify([newNotif, ...existing].slice(0, 50)));
-  // Dispatch a custom event so all mounted bells update immediately
-  window.dispatchEvent(new Event('notifications-updated'));
-}
-
-// ── Type → emoji mapping ──────────────────────────────────────
+// ── Icon per notification type ─────────────────────────────
 const TYPE_ICON = {
   reminder: '⏰',
   success:  '✅',
@@ -53,116 +35,132 @@ const TYPE_ICON = {
   info:     '📌',
 };
 
-// ── Component ─────────────────────────────────────────────────
-function NotificationBell({ userId }) {
+// ── Component ──────────────────────────────────────────────
+function NotificationBell() {
   const [open,          setOpen]          = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [loadError,     setLoadError]     = useState(false);
   const panelRef = useRef(null);
 
-  // Load from localStorage
-  const load = () => {
-    if (!userId) return;
-    const raw = localStorage.getItem(notifKey(userId));
-    setNotifications(raw ? JSON.parse(raw) : []);
+  // ── Load from API ──────────────────────────────────────────
+  const load = async () => {
+    try {
+      const res = await api.get('/api/notifications');
+      setNotifications(res.data.data.notifications || []);
+      setLoadError(false);
+    } catch {
+      setLoadError(true);
+    }
   };
 
   useEffect(() => {
     load();
     window.addEventListener('notifications-updated', load);
     return () => window.removeEventListener('notifications-updated', load);
-  }, [userId]);
+  }, []);
 
-  // Close panel on outside click
+  // Close on outside click
   useEffect(() => {
-    const handleClick = (e) => {
-      if (panelRef.current && !panelRef.current.contains(e.target)) {
-        setOpen(false);
-      }
+    if (!open) return;
+    const handler = (e) => {
+      if (panelRef.current && !panelRef.current.contains(e.target)) setOpen(false);
     };
-    if (open) document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, [open]);
 
   const unread = notifications.filter((n) => !n.read).length;
 
-  const markAllRead = () => {
-    const updated = notifications.map((n) => ({ ...n, read: true }));
-    localStorage.setItem(notifKey(userId), JSON.stringify(updated));
-    setNotifications(updated);
+  // ── Actions ────────────────────────────────────────────────
+
+  const handleOpen = () => {
+    const nowOpen = !open;
+    setOpen(nowOpen);
+    if (nowOpen && unread > 0) markAllRead();
   };
 
-  const clearAll = () => {
-    localStorage.setItem(notifKey(userId), '[]');
-    setNotifications([]);
+  const markAllRead = async () => {
+    try {
+      await api.patch('/api/notifications/read-all');
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    } catch { /* silent */ }
   };
 
-  const markRead = (id) => {
-    const updated = notifications.map((n) =>
-      n.id === id ? { ...n, read: true } : n
-    );
-    localStorage.setItem(notifKey(userId), JSON.stringify(updated));
-    setNotifications(updated);
+  const markOneRead = async (id) => {
+    try {
+      await api.patch(`/api/notifications/${id}/read`);
+      setNotifications((prev) =>
+        prev.map((n) => n.id === id ? { ...n, read: true } : n)
+      );
+    } catch { /* silent */ }
   };
 
-  const deleteOne = (id) => {
-    const updated = notifications.filter((n) => n.id !== id);
-    localStorage.setItem(notifKey(userId), JSON.stringify(updated));
-    setNotifications(updated);
+  const deleteOne = async (e, id) => {
+    e.stopPropagation();
+    try {
+      await api.delete(`/api/notifications/${id}`);
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+    } catch { /* silent */ }
+  };
+
+  const clearAll = async () => {
+    try {
+      await api.delete('/api/notifications');
+      setNotifications([]);
+    } catch { /* silent */ }
   };
 
   const formatTime = (iso) => {
-    const d = new Date(iso);
-    const now = new Date();
-    const diffMs = now - d;
-    const diffMins = Math.floor(diffMs / 60000);
-    if (diffMins < 1)  return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    const diffHrs = Math.floor(diffMins / 60);
-    if (diffHrs < 24)  return `${diffHrs}h ago`;
+    const d       = new Date(iso);
+    const diffMs  = Date.now() - d.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1)  return 'Just now';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffHrs = Math.floor(diffMin / 60);
+    if (diffHrs < 24) return `${diffHrs}h ago`;
     return d.toLocaleDateString();
   };
 
+  // ── Render ─────────────────────────────────────────────────
   return (
     <div className="notif-bell-wrapper" ref={panelRef}>
-      {/* Bell button */}
+
       <button
         className="notif-bell-btn"
-        onClick={() => {
-          setOpen((prev) => !prev);
-          if (!open) markAllRead();
-        }}
+        onClick={handleOpen}
         aria-label={`Notifications${unread > 0 ? ` (${unread} unread)` : ''}`}
         title="Notifications"
       >
         <span className="notif-bell-icon">🔔</span>
         {unread > 0 && (
-          <span className="notif-badge" aria-live="polite">
-            {unread > 9 ? '9+' : unread}
-          </span>
+          <span className="notif-badge">{unread > 9 ? '9+' : unread}</span>
         )}
       </button>
 
-      {/* Dropdown panel */}
       {open && (
         <div className="notif-panel" role="dialog" aria-label="Notifications">
+
           <div className="notif-panel-header">
             <span className="notif-panel-title">Notifications</span>
-            <div className="notif-panel-actions">
-              {notifications.length > 0 && (
-                <button className="notif-action-btn" onClick={clearAll}>
-                  Clear all
-                </button>
-              )}
-            </div>
+            {notifications.length > 0 && (
+              <button className="notif-action-btn" onClick={clearAll}>
+                Clear all
+              </button>
+            )}
           </div>
 
           <div className="notif-list">
-            {notifications.length === 0 ? (
+            {loadError ? (
+              <div className="notif-empty">
+                <span className="notif-empty-icon">⚠️</span>
+                <p>Could not load notifications.</p>
+              </div>
+            ) : notifications.length === 0 ? (
               <div className="notif-empty">
                 <span className="notif-empty-icon">🔕</span>
                 <p>No notifications yet</p>
                 <p className="notif-empty-hint">
-                  You'll see study reminders and session alerts here.
+                  Study reminders and session alerts will appear here.
                 </p>
               </div>
             ) : (
@@ -170,11 +168,9 @@ function NotificationBell({ userId }) {
                 <div
                   key={n.id}
                   className={`notif-item ${n.read ? 'notif-item--read' : 'notif-item--unread'}`}
-                  onClick={() => markRead(n.id)}
+                  onClick={() => !n.read && markOneRead(n.id)}
                 >
-                  <span className="notif-item-icon">
-                    {TYPE_ICON[n.type] || '📌'}
-                  </span>
+                  <span className="notif-item-icon">{TYPE_ICON[n.type] || '📌'}</span>
                   <div className="notif-item-content">
                     <p className="notif-item-title">{n.title}</p>
                     <p className="notif-item-body">{n.body}</p>
@@ -182,8 +178,8 @@ function NotificationBell({ userId }) {
                   </div>
                   <button
                     className="notif-item-delete"
-                    onClick={(e) => { e.stopPropagation(); deleteOne(n.id); }}
-                    aria-label="Dismiss notification"
+                    onClick={(e) => deleteOne(e, n.id)}
+                    aria-label="Dismiss"
                     title="Dismiss"
                   >
                     ×
@@ -192,6 +188,7 @@ function NotificationBell({ userId }) {
               ))
             )}
           </div>
+
         </div>
       )}
     </div>

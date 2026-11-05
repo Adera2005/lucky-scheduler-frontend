@@ -194,7 +194,94 @@
 }
 
 /* ────────────────────────────────────────────────────────────
-   DAY CARD
+   DAY ACCORDION (inside weeks/months — collapsible)
+   ──────────────────────────────────────────────────────────── */
+
+.gtl-day-accordion {
+  border: 1px solid var(--border-color);
+  border-radius: 9px;
+  overflow: hidden;
+  background: var(--bg-card);
+  transition: border-color 0.2s ease;
+}
+
+.gtl-day-accordion:hover {
+  border-color: var(--border-hover);
+}
+
+.gtl-day-acc-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--bg-card-inner);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+  color: var(--text-primary);
+  font-family: Arial, sans-serif;
+  transition: background 0.2s ease;
+  flex-wrap: wrap;
+}
+
+.gtl-day-acc-header:hover {
+  background: var(--accent-soft);
+}
+
+.gtl-day-acc-header--open {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gtl-day-chevron {
+  color: var(--text-accent);
+  font-size: 10px;
+  width: 10px;
+  flex-shrink: 0;
+}
+
+.gtl-day-acc-label {
+  font-weight: 700;
+  color: var(--text-accent);
+  font-size: 13px;
+  flex: 1;
+  min-width: 50px;
+}
+
+.gtl-day-acc-progress {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--progress-text);
+  min-width: 52px;
+  text-align: right;
+}
+
+.gtl-day-acc-pill {
+  width: 50px;
+  height: 4px;
+  background: var(--progress-bg);
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.gtl-day-acc-fill {
+  height: 100%;
+  background: var(--progress-fill);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.gtl-day-acc-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   DAY CARD  (flat — only used when mode = 'days')
    ──────────────────────────────────────────────────────────── */
 
 .gtl-day-card {

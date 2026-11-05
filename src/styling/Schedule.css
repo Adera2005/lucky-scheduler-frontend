@@ -1,10 +1,10 @@
 /* ============================================================
    Schedule.css
-   Plain CSS only — no Tailwind, no utility classes.
+   Plain CSS only â€” no Tailwind, no utility classes.
    All colours use CSS custom properties from theme.css.
    ============================================================ */
 
-/* ── Page wrapper ── */
+/* â”€â”€ Page wrapper â”€â”€ */
 .schedule-page {
   background: var(--bg-page);
   min-height: 100vh;
@@ -14,7 +14,7 @@
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* ── Header card ── */
+/* â”€â”€ Header card â”€â”€ */
 .schedule-header {
   background: var(--bg-card);
   margin: 0 0 18px;
@@ -56,7 +56,7 @@
   margin: 0 0 12px;
 }
 
-/* ── Overall progress bar ── */
+/* â”€â”€ Overall progress bar â”€â”€ */
 .progress-wrapper {
   margin-top: 14px;
 }
@@ -101,7 +101,7 @@
   color: var(--text-secondary);
 }
 
-/* ── Three-column layout with drag handles ── */
+/* â”€â”€ Three-column layout with drag handles â”€â”€ */
 /* gridTemplateColumns is set inline: "X% 8px Y% 8px Z%" */
 .schedule-layout {
   display: grid;
@@ -110,7 +110,7 @@
   width: 100%;
 }
 
-/* ── Column panel (shared base) ── */
+/* â”€â”€ Column panel (shared base) â”€â”€ */
 .col-panel {
   background: var(--bg-card);
   border-radius: 14px;
@@ -134,7 +134,7 @@
   color: var(--text-secondary);
 }
 
-/* ── Drag handle ── */
+/* â”€â”€ Drag handle â”€â”€ */
 .col-drag-handle {
   display: flex;
   align-items: center;
@@ -160,7 +160,7 @@
   border-radius: 2px;
 }
 
-/* ── YouTube column ── */
+/* â”€â”€ YouTube column â”€â”€ */
 .youtube-search-btn {
   display: inline-flex;
   align-items: center;
@@ -201,6 +201,153 @@
   color: #fc8181;
 }
 
+
+/* -- YouTube session dropdown rows -- */
+.yt-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.yt-dropdown {
+  border: 1px solid var(--border-color);
+  border-radius: 11px;
+  overflow: hidden;
+  background: var(--bg-card);
+  transition: border-color 0.2s ease, background 0.3s ease;
+}
+
+.yt-dropdown:hover {
+  border-color: var(--border-hover);
+}
+
+/* Header is a flex bar: toggle on the left, fetch button on the right */
+.yt-dropdown-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--bg-card-inner);
+  transition: background 0.2s ease;
+}
+
+/* Toggle (chevron + label + subtitle) — fills remaining space */
+.yt-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.yt-dropdown-toggle:disabled {
+  cursor: default;
+}
+
+.yt-dropdown-chevron {
+  color: var(--text-accent);
+  font-size: 11px;
+  width: 12px;
+  flex-shrink: 0;
+}
+
+.yt-dropdown-label {
+  font-weight: 700;
+  color: var(--text-accent);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.yt-dropdown-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Per-session fetch button — compact, right-aligned */
+.yt-session-fetch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border: none;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-family: Arial, sans-serif;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: var(--shadow-btn);
+}
+
+.yt-session-fetch-btn:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
+}
+
+.yt-session-fetch-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Video count pill (replaces the button after fetch) */
+.yt-dropdown-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--progress-text);
+  background: var(--accent-soft);
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.yt-dropdown-body {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Course-name note when no PDF is uploaded */
+.youtube-course-note {
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--accent-soft);
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.youtube-course-note strong {
+  color: var(--text-accent);
+}
+
+.youtube-fallback-note {
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  padding: 7px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
 .youtube-list {
   display: flex;
   flex-direction: column;
@@ -259,13 +406,13 @@
   box-shadow: var(--shadow-btn-hover);
 }
 
-/* ── Sessions column ── */
-/* No max-height, no overflow hidden — shows all content */
+/* â”€â”€ Sessions column â”€â”€ */
+/* No max-height, no overflow hidden â€” shows all content */
 .sessions-section {
   overflow: visible;
 }
 
-/* ── PDF column ── */
+/* â”€â”€ PDF column â”€â”€ */
 .pdf-section {
   display: flex;
   flex-direction: column;
@@ -315,7 +462,7 @@
   line-height: 1.5;
 }
 
-/* ── State messages ── */
+/* â”€â”€ State messages â”€â”€ */
 .schedule-state-msg {
   text-align: center;
   padding: 20px;
@@ -333,7 +480,7 @@
   color: #fc8181;
 }
 
-/* ── Responsive: stack on mobile ── */
+/* â”€â”€ Responsive: stack on mobile â”€â”€ */
 @media (max-width: 900px) {
   .schedule-page {
     padding: 80px 12px 28px;
@@ -357,14 +504,14 @@
   }
 }
 
-/* ── Sessions dropdown chip (in header summary row) ── */
+/* â”€â”€ Sessions dropdown chip (in header summary row) â”€â”€ */
 
 .sessions-chip-wrapper {
   position: relative;
   display: inline-block;
 }
 
-/* The chip button itself — inherits .summary-chip look */
+/* The chip button itself â€” inherits .summary-chip look */
 .sessions-chip-btn {
   display: inline-flex;
   align-items: center;
@@ -381,7 +528,7 @@
   border-color: var(--accent);
 }
 
-/* "+N more ▼" indicator inside the chip */
+/* "+N more â–¼" indicator inside the chip */
 .sessions-chip-more {
   font-size: 11px;
   font-weight: 600;

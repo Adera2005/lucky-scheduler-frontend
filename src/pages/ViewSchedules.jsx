@@ -64,10 +64,6 @@ function ViewSchedules() {
             <h1>Your Schedules</h1>
             <p>View, manage, and track all your study schedules.</p>
           </div>
-
-          <Link to="/create-schedule" className="vs-create-btn">
-            + Create New
-          </Link>
         </div>
 
         {/* Loading */}

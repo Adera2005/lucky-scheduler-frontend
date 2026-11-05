@@ -171,3 +171,33 @@ body {
   width: 20px;
   height: 20px;
 }
+
+/* -- Dark mode: auth form inputs always white for legibility -- */
+[data-theme="dark"] .signup-field input {
+  background: #ffffff;
+  color: #1a1f2e;
+  border-color: #9bafd6;
+}
+
+[data-theme="dark"] .signup-field input::placeholder {
+  color: #6b7590;
+}
+
+[data-theme="dark"] .signup-password-box {
+  background: #ffffff;
+  border-color: #9bafd6;
+}
+
+[data-theme="dark"] .signup-password-box input {
+  color: #1a1f2e;
+}
+
+[data-theme="dark"] .signup-password-box input::placeholder {
+  color: #6b7590;
+}
+
+/* Eye icon visible in both themes */
+.signup-password-box span img {
+  filter: var(--eye-icon-filter);
+  display: block;
+}

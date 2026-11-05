@@ -3,9 +3,11 @@
 // Pure utility — groups a flat array of study tasks into a
 // hierarchical structure based on the total number of days:
 //
-//   ≤ 10 days   → flat list of Day groups (existing behaviour)
-//   11–27 days  → grouped into Weeks  (Week 1, Week 2, …)
+//   < 7 days    → flat list of Day groups
+//   7–27 days   → grouped into Weeks (Week 1, Week 2, …)
+//                 each Week is expandable into individual Days
 //   28+ days    → grouped into Months (Month 1 = Weeks 1-4, …)
+//                 each Month → expandable Weeks → expandable Days
 //
 // Each level can be expanded / collapsed independently in the UI.
 // Plain JS only — no external dependencies.
@@ -45,12 +47,12 @@ export function groupTasksByPeriod(tasks, totalDays) {
       tasks: dayTasks,
     }));
 
-  // ── Flat (≤ 10 days) ──
-  if (totalDays <= 10) {
+  // ── Flat (< 7 days) ──
+  if (totalDays < 7) {
     return { mode: 'days', groups: sortedDays };
   }
 
-  // ── Week grouping ──
+  // ── Week grouping (7–27 days) ──
   // 7 days per week. Week 1 = days 1-7, Week 2 = days 8-14, …
   const weekGroups = buildWeeks(sortedDays);
 

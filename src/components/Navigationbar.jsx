@@ -12,13 +12,10 @@ import '../styling/Navigation.css';
 import groundBreaking       from '../assets/groundbreaker-svgrepo-com.svg';
 import NotificationBell     from './NotificationBell.jsx';
 import { useTheme }         from '../context/ThemeContext.jsx';
-import { getUserId }        from '../utils/auth.js';
 
 function Navigationbar({ onMenuClick, isOpen }) {
   const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
-
-  const userId = getUserId();
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -49,8 +46,8 @@ function Navigationbar({ onMenuClick, isOpen }) {
       {/* ── Right: notification bell + theme toggle + logout ── */}
       <div className="nav-right-group">
 
-        {/* Notification bell */}
-        <NotificationBell userId={userId} />
+        {/* Notification bell — reads from API, no userId prop needed */}
+        <NotificationBell />
 
         {/* Dark / light mode toggle */}
         <button

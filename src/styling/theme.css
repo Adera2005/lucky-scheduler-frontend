@@ -74,6 +74,9 @@
   --input-focus:    #5b7fd6;
   --input-text:     #24304d;
 
+  /* Eye toggle icon in auth forms — dark navy for visibility on light inputs */
+  --eye-icon-filter: brightness(0) saturate(100%) invert(16%) sepia(18%) saturate(700%) hue-rotate(185deg) brightness(85%) contrast(90%);
+
   --shadow-card:      0 4px 20px rgba(91, 127, 214, 0.14);
   --shadow-nav:       0 2px 10px rgba(74, 108, 196, 0.22);
   --shadow-btn:       0 2px 8px  rgba(91, 127, 214, 0.28);
@@ -147,6 +150,9 @@
   --input-border:   #363d52;
   --input-focus:    #c9a227;
   --input-text:     #e8e2d0;
+
+  /* Eye toggle icon in auth forms — bright gold so it's visible on dark inputs */
+  --eye-icon-filter: brightness(0) saturate(100%) invert(72%) sepia(55%) saturate(500%) hue-rotate(5deg) brightness(95%) contrast(90%);
 
   --shadow-card:      0 4px 20px rgba(0, 0, 0, 0.45);
   --shadow-nav:       0 2px 10px rgba(0, 0, 0, 0.60);

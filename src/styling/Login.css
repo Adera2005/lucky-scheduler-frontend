@@ -169,3 +169,33 @@ body {
 .signup-text a:hover {
   text-decoration: underline;
 }
+
+/* -- Dark mode: auth form inputs always white for legibility -- */
+[data-theme="dark"] .login-field input {
+  background: #ffffff;
+  color: #1a1f2e;
+  border-color: #9bafd6;
+}
+
+[data-theme="dark"] .login-field input::placeholder {
+  color: #6b7590;
+}
+
+[data-theme="dark"] .password-box {
+  background: #ffffff;
+  border-color: #9bafd6;
+}
+
+[data-theme="dark"] .password-box input {
+  color: #1a1f2e;
+}
+
+[data-theme="dark"] .password-box input::placeholder {
+  color: #6b7590;
+}
+
+/* Eye icon visible in both themes */
+.password-box span img {
+  filter: var(--eye-icon-filter);
+  display: block;
+}
